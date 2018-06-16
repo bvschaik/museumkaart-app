@@ -3,8 +3,10 @@ package nl.biancavanschaik.android.museumkaart
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_home.*
-import nl.biancavanschaik.android.museumkaart.R
+import kotlinx.android.synthetic.main.activity_home.message
+import kotlinx.android.synthetic.main.activity_home.museum_id_button
+import kotlinx.android.synthetic.main.activity_home.museum_id_input
+import kotlinx.android.synthetic.main.activity_home.navigation
 
 class HomeActivity : AppCompatActivity() {
 
@@ -31,5 +33,9 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
+        museum_id_button.setOnClickListener {
+            startActivity(DetailsActivity.createIntent(this, museum_id_input.text.toString()))
+        }
     }
 }

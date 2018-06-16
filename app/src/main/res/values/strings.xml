@@ -3,4 +3,14 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+
+    <!-- Details activity -->
+    <string name="title_activity_details">DetailsActivity</string>
+    <string name="title_opening_hours">Openingstijden</string>
+    <string name="title_address">Adres</string>
+    <string name="title_prices">Toegangsprijzen</string>
+    <string name="button_website">Website</string>
+
+    <string name="details_error_text">De museumdetails konden niet geladen worden.</string>
+    <string name="button_retry">Probeer opnieuw</string>
 </resources>

@@ -60,6 +60,10 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun showDetails(museum: MuseumDetails) {
+        content_group.visibility = View.VISIBLE
+        error_group.visibility = View.GONE
+        progress.visibility = View.GONE
+
         title = museum.displayname
 
         description.setHtmlText(museum.listings.permanent.firstOrNull()?.description)
@@ -77,10 +81,6 @@ class DetailsActivity : AppCompatActivity() {
         museum.path?.let { photo.loadLargeImage(it) }
 
         showExhibitions(museum.listings.exhibition)
-
-        content_group.visibility = View.VISIBLE
-        error_group.visibility = View.GONE
-        progress.visibility = View.GONE
     }
 
     private fun showExhibitions(exhibitions: List<Exhibition>) {

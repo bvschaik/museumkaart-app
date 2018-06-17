@@ -6,9 +6,11 @@ import android.view.ViewGroup
 import android.view.View
 import kotlinx.android.synthetic.main.list_item_exhibition.view.description
 import kotlinx.android.synthetic.main.list_item_exhibition.view.period
+import kotlinx.android.synthetic.main.list_item_exhibition.view.photo
 import kotlinx.android.synthetic.main.list_item_exhibition.view.title
 import nl.biancavanschaik.android.museumkaart.R
 import nl.biancavanschaik.android.museumkaart.data.rest.model.Exhibition
+import nl.biancavanschaik.android.museumkaart.util.loadSmallImage
 import nl.biancavanschaik.android.museumkaart.util.setHtmlText
 
 class ExhibitionRecyclerViewAdapter(private val exhibitions: List<Exhibition>) : RecyclerView.Adapter<ExhibitionRecyclerViewAdapter.ViewHolder>() {
@@ -29,6 +31,11 @@ class ExhibitionRecyclerViewAdapter(private val exhibitions: List<Exhibition>) :
             holder.view.period.visibility = View.GONE
         }
         holder.view.description.setHtmlText(exhibition.description)
+        if (exhibition.path != null) {
+            holder.view.photo.loadSmallImage(exhibition.path)
+        } else {
+            holder.view.photo.setImageResource(0)
+        }
     }
 
     override fun getItemCount(): Int {

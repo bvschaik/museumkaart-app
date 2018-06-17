@@ -3,17 +3,11 @@ package nl.biancavanschaik.android.museumkaart
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.text.Html
-import android.util.Log
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_details.address
 import kotlinx.android.synthetic.main.activity_details.content_group
 import kotlinx.android.synthetic.main.activity_details.description
@@ -21,7 +15,6 @@ import kotlinx.android.synthetic.main.activity_details.error_group
 import kotlinx.android.synthetic.main.activity_details.error_text
 import kotlinx.android.synthetic.main.activity_details.exhibitions_group
 import kotlinx.android.synthetic.main.activity_details.exhibitions_list
-import kotlinx.android.synthetic.main.activity_details.exhibitions_title
 import kotlinx.android.synthetic.main.activity_details.opening_hours
 import kotlinx.android.synthetic.main.activity_details.photo
 import kotlinx.android.synthetic.main.activity_details.prices
@@ -30,6 +23,7 @@ import kotlinx.android.synthetic.main.activity_details.website
 import nl.biancavanschaik.android.museumkaart.data.rest.model.Exhibition
 import nl.biancavanschaik.android.museumkaart.data.rest.model.MuseumDetails
 import nl.biancavanschaik.android.museumkaart.util.Resource
+import nl.biancavanschaik.android.museumkaart.util.loadLargeImage
 import nl.biancavanschaik.android.museumkaart.util.setHtmlText
 import nl.biancavanschaik.android.museumkaart.view.ExhibitionRecyclerViewAdapter
 import org.koin.android.architecture.ext.viewModel
@@ -80,7 +74,7 @@ class DetailsActivity : AppCompatActivity() {
         } else {
             website.visibility = View.GONE
         }
-        museum.path?.let { photo.loadImage(it) }
+        museum.path?.let { photo.loadLargeImage(it) }
 
         showExhibitions(museum.listings.exhibition)
 
@@ -99,11 +93,6 @@ class DetailsActivity : AppCompatActivity() {
         error_group.visibility = View.VISIBLE
         content_group.visibility = View.GONE
         progress.visibility = View.GONE
-    }
-
-    private fun ImageView.loadImage(imagePath: String) {
-        val fullUrl = Uri.parse("https://cdn.museum.nl/cards/700x394").buildUpon().appendPath(imagePath)
-        //Picasso.with(this.context).load(fullUrl.build()).into(photo)
     }
 
     companion object {

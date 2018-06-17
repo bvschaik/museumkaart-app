@@ -4,6 +4,8 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
+    <string name="period_description">%1$s t/m %2$s</string>
+
     <!-- Details activity -->
     <string name="title_activity_details">DetailsActivity</string>
     <string name="title_opening_hours">Openingstijden</string>

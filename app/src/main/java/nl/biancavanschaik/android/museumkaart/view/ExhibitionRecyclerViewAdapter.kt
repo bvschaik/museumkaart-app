@@ -12,6 +12,7 @@ import nl.biancavanschaik.android.museumkaart.R
 import nl.biancavanschaik.android.museumkaart.data.rest.model.Exhibition
 import nl.biancavanschaik.android.museumkaart.util.loadSmallImage
 import nl.biancavanschaik.android.museumkaart.util.setHtmlText
+import nl.biancavanschaik.android.museumkaart.util.toHumanReadableDate
 
 class ExhibitionRecyclerViewAdapter(private val exhibitions: List<Exhibition>) : RecyclerView.Adapter<ExhibitionRecyclerViewAdapter.ViewHolder>() {
 
@@ -25,7 +26,11 @@ class ExhibitionRecyclerViewAdapter(private val exhibitions: List<Exhibition>) :
         val exhibition = exhibitions[position]
         holder.view.title.text = exhibition.name
         if (exhibition.startdate != null && exhibition.enddate != null) {
-            holder.view.period.text = exhibition.startdate + " t/m " + exhibition.enddate
+            holder.view.period.text = holder.view.context.getString(
+                    R.string.period_description,
+                    exhibition.startdate.toHumanReadableDate(),
+                    exhibition.enddate.toHumanReadableDate()
+            )
             holder.view.period.visibility = View.VISIBLE
         } else {
             holder.view.period.visibility = View.GONE

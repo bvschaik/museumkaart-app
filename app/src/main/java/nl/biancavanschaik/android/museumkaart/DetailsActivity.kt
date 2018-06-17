@@ -3,7 +3,10 @@ package nl.biancavanschaik.android.museumkaart
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.support.customtabs.CustomTabsIntent
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -73,7 +76,7 @@ class DetailsActivity : AppCompatActivity() {
         if (museum.website != null) {
             website.visibility = View.VISIBLE
             website.setOnClickListener {
-                //openWebsite(museum.website)
+                openWebsite(museum.website)
             }
         } else {
             website.visibility = View.GONE
@@ -86,6 +89,14 @@ class DetailsActivity : AppCompatActivity() {
     private fun showExhibitions(exhibitions: List<Exhibition>) {
         exhibitions_list.adapter = ExhibitionRecyclerViewAdapter(exhibitions)
         exhibitions_group.visibility = if (exhibitions.isEmpty()) View.GONE else View.VISIBLE
+    }
+
+    private fun openWebsite(url: String) {
+        val customTabsIntent = CustomTabsIntent.Builder()
+                .setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                .build()
+        val fullUrl = if (url.contains("://")) url else "http://$url"
+        customTabsIntent.launchUrl(this, Uri.parse(fullUrl))
     }
 
     private fun showError(message: String) {

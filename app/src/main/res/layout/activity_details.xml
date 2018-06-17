@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,7 +8,6 @@
     >
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/activity_margin"
@@ -42,8 +41,8 @@
             android:id="@+id/error_retry_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/button_retry"
             android:layout_marginTop="@dimen/activity_margin"
+            android:text="@string/button_retry"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/error_text"
@@ -53,7 +52,7 @@
             android:id="@+id/content_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="photo,description,visited,website,address_title,address,opening_hours_title,opening_hours,prices_title,prices"
+            app:constraint_referenced_ids="photo,description,visited,website,address_title,address,opening_hours_title,opening_hours,prices_title,prices,exhibitions_group"
             />
 
         <ImageView
@@ -164,5 +163,33 @@
             tools:text="Prices"
             />
 
+        <android.support.constraint.Group
+            android:id="@+id/exhibitions_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="exhibitions_title,exhibitions_list"
+            />
+
+        <TextView
+            android:id="@+id/exhibitions_title"
+            style="@style/Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/title_exhibitions"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/prices"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/exhibitions_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exhibitions_title"
+            />
     </android.support.constraint.ConstraintLayout>
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>

@@ -12,9 +12,7 @@ import kotlinx.android.synthetic.main.activity_details.error_group
 import kotlinx.android.synthetic.main.activity_details.error_text
 import kotlinx.android.synthetic.main.activity_details.progress
 import nl.biancavanschaik.android.museumkaart.data.rest.model.MuseumDetails
-import nl.biancavanschaik.android.museumkaart.util.rest.ApiErrorResponse
-import nl.biancavanschaik.android.museumkaart.util.rest.ApiResponse
-import nl.biancavanschaik.android.museumkaart.util.rest.ApiSuccessResponse
+import nl.biancavanschaik.android.museumkaart.util.Resource
 import org.koin.android.architecture.ext.viewModel
 
 class DetailsActivity : AppCompatActivity() {
@@ -29,11 +27,18 @@ class DetailsActivity : AppCompatActivity() {
         viewModel.museumDetails.observe(this, Observer { showData(it) })
     }
 
-    private fun showData(result: ApiResponse<MuseumDetails>?) {
-        when (result) {
-            is ApiSuccessResponse -> showDetails(result.body)
-            is ApiErrorResponse -> showError(result.errorMessage)
+    private fun showData(result: Resource<MuseumDetails>?) {
+        when (result?.status) {
+            Resource.Status.LOADING -> showLoading()
+            Resource.Status.SUCCESS -> result.data?.let { showDetails(it) }
+            Resource.Status.ERROR -> showError(result.message ?: "Unknown error")
         }
+    }
+
+    private fun showLoading() {
+        progress.visibility = View.VISIBLE
+        content_group.visibility = View.GONE
+        error_group.visibility = View.GONE
     }
 
     private fun showDetails(details: MuseumDetails) {

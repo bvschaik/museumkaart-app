@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.activity_details.address
 import kotlinx.android.synthetic.main.activity_details.content_group
@@ -138,6 +139,16 @@ class DetailsActivity : AppCompatActivity() {
 
     private fun openListing(listingId: String) {
         startActivity(ListingActivity.createIntent(this, listingId))
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     companion object {

@@ -25,7 +25,10 @@
             android:name=".DetailsActivity"
             android:label="@string/title_activity_details"
             android:parentActivityName=".HomeActivity" />
-        <activity android:name=".ListingActivity"></activity>
+        <activity
+            android:name=".ListingActivity"
+            android:label=" "
+            android:parentActivityName=".DetailsActivity" />
     </application>
 
 </manifest>

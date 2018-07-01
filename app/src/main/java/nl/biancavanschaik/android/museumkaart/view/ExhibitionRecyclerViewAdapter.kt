@@ -2,19 +2,18 @@ package nl.biancavanschaik.android.museumkaart.view
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.ViewGroup
 import android.view.View
+import android.view.ViewGroup
 import kotlinx.android.synthetic.main.list_item_exhibition.view.description
 import kotlinx.android.synthetic.main.list_item_exhibition.view.period
 import kotlinx.android.synthetic.main.list_item_exhibition.view.photo
 import kotlinx.android.synthetic.main.list_item_exhibition.view.title
 import nl.biancavanschaik.android.museumkaart.R
-import nl.biancavanschaik.android.museumkaart.data.rest.model.Exhibition
+import nl.biancavanschaik.android.museumkaart.data.database.model.Listing
 import nl.biancavanschaik.android.museumkaart.util.loadSmallImage
 import nl.biancavanschaik.android.museumkaart.util.setHtmlText
-import nl.biancavanschaik.android.museumkaart.util.toHumanReadableDate
 
-class ExhibitionRecyclerViewAdapter(private val exhibitions: List<Exhibition>) : RecyclerView.Adapter<ExhibitionRecyclerViewAdapter.ViewHolder>() {
+class ExhibitionRecyclerViewAdapter(private val exhibitions: List<Listing>) : RecyclerView.Adapter<ExhibitionRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -25,19 +24,19 @@ class ExhibitionRecyclerViewAdapter(private val exhibitions: List<Exhibition>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val exhibition = exhibitions[position]
         holder.view.title.text = exhibition.name
-        if (exhibition.startdate != null && exhibition.enddate != null) {
+        if (exhibition.startDate != null && exhibition.endDate != null) {
             holder.view.period.text = holder.view.context.getString(
                     R.string.period_description,
-                    exhibition.startdate.toHumanReadableDate(),
-                    exhibition.enddate.toHumanReadableDate()
+                    exhibition.startDate.toHumanString(),
+                    exhibition.endDate.toHumanString()
             )
             holder.view.period.visibility = View.VISIBLE
         } else {
             holder.view.period.visibility = View.GONE
         }
         holder.view.description.setHtmlText(exhibition.description)
-        if (exhibition.path != null) {
-            holder.view.photo.loadSmallImage(exhibition.path)
+        if (exhibition.imagePath != null) {
+            holder.view.photo.loadSmallImage(exhibition.imagePath)
         } else {
             holder.view.photo.setImageResource(0)
         }

@@ -23,8 +23,8 @@ import kotlinx.android.synthetic.main.activity_details.photo
 import kotlinx.android.synthetic.main.activity_details.prices
 import kotlinx.android.synthetic.main.activity_details.progress
 import kotlinx.android.synthetic.main.activity_details.website
-import nl.biancavanschaik.android.museumkaart.data.rest.model.Exhibition
-import nl.biancavanschaik.android.museumkaart.data.rest.model.MuseumDetails
+import nl.biancavanschaik.android.museumkaart.data.database.model.Listing
+import nl.biancavanschaik.android.museumkaart.data.database.model.Museum
 import nl.biancavanschaik.android.museumkaart.util.Resource
 import nl.biancavanschaik.android.museumkaart.util.loadLargeImage
 import nl.biancavanschaik.android.museumkaart.util.setHtmlText
@@ -48,7 +48,7 @@ class DetailsActivity : AppCompatActivity() {
         viewModel.museumDetails.observe(this, Observer { showData(it) })
     }
 
-    private fun showData(result: Resource<MuseumDetails>?) {
+    private fun showData(result: Resource<Museum>?) {
         when (result?.status) {
             Resource.Status.LOADING -> showLoading()
             Resource.Status.SUCCESS -> result.data?.let { showDetails(it) }
@@ -62,31 +62,32 @@ class DetailsActivity : AppCompatActivity() {
         error_group.visibility = View.GONE
     }
 
-    private fun showDetails(museum: MuseumDetails) {
+    private fun showDetails(museum: Museum) {
         content_group.visibility = View.VISIBLE
         error_group.visibility = View.GONE
         progress.visibility = View.GONE
 
-        title = museum.displayname
+        val details = museum.details
+        title = details.displayName
 
-        description.setHtmlText(museum.listings.permanent.firstOrNull()?.description)
-        address.setHtmlText(arrayOf(museum.streetandnumber, museum.city, museum.telephone).filterNotNull().joinToString(separator = "<br>"))
-        prices.setHtmlText(museum.admissionprice)
-        opening_hours.setHtmlText(museum.openinghours)
-        if (museum.website != null) {
+        description.setHtmlText(museum.permanentExhibition?.description)
+        address.setHtmlText(arrayOf(details.address, details.city, details.telephone).filterNotNull().joinToString(separator = "<br>"))
+        prices.setHtmlText(details.admissionPrice)
+        opening_hours.setHtmlText(details.openingHours)
+        if (details.website != null) {
             website.visibility = View.VISIBLE
             website.setOnClickListener {
-                openWebsite(museum.website)
+                openWebsite(details.website)
             }
         } else {
             website.visibility = View.GONE
         }
-        museum.path?.let { photo.loadLargeImage(it) }
+        details.imagePath?.let { photo.loadLargeImage(it) }
 
-        showExhibitions(museum.listings.exhibition)
+        showExhibitions(museum.exhibitions)
     }
 
-    private fun showExhibitions(exhibitions: List<Exhibition>) {
+    private fun showExhibitions(exhibitions: List<Listing>) {
         exhibitions_list.adapter = ExhibitionRecyclerViewAdapter(exhibitions)
         exhibitions_group.visibility = if (exhibitions.isEmpty()) View.GONE else View.VISIBLE
     }

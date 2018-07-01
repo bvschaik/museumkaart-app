@@ -8,7 +8,7 @@ data class Exhibition(
         val startdate: String?,
         val enddate: String?,
         val name: String,
-        val locationid: String?,
+        val locationid: Int?,
         val description: String,
         val openinghours: String?,
         val admissionprice: String?,

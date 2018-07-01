@@ -69,8 +69,21 @@ class DetailsActivity : AppCompatActivity() {
 
     private fun showLoading() {
         progress.visibility = View.VISIBLE
-        content_group.visibility = View.GONE
         error_group.visibility = View.GONE
+        content_group.visibility = View.GONE
+        exhibitions_group.visibility = View.GONE
+        promotions_group.visibility = View.GONE
+        events_group.visibility = View.GONE
+    }
+
+    private fun showError(message: String) {
+        error_text.text = message
+        error_group.visibility = View.VISIBLE
+        progress.visibility = View.GONE
+        content_group.visibility = View.GONE
+        exhibitions_group.visibility = View.GONE
+        promotions_group.visibility = View.GONE
+        events_group.visibility = View.GONE
     }
 
     private fun showDetails(museum: Museum) {
@@ -121,13 +134,6 @@ class DetailsActivity : AppCompatActivity() {
                 .build()
         val fullUrl = if (url.contains("://")) url else "http://$url"
         customTabsIntent.launchUrl(this, Uri.parse(fullUrl))
-    }
-
-    private fun showError(message: String) {
-        error_text.text = message
-        error_group.visibility = View.VISIBLE
-        content_group.visibility = View.GONE
-        progress.visibility = View.GONE
     }
 
     private fun openListing(listingId: String) {

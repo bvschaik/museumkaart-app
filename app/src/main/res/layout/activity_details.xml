@@ -52,7 +52,7 @@
             android:id="@+id/content_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="photo,description,visited,website,address_title,address,opening_hours_title,opening_hours,prices_title,prices,exhibitions_group,events_group,promotions_group"
+            app:constraint_referenced_ids="photo,description,visited,website,address_title,address,opening_hours_title,opening_hours,prices_title,prices"
             />
 
         <ImageView

@@ -14,8 +14,14 @@
     <string name="title_exhibitions">Exposities</string>
     <string name="title_events">Activiteiten</string>
     <string name="title_promotions">Museumkaart acties</string>
+    <string name="title_period">Looptijd</string>
     <string name="button_website">Website</string>
 
     <string name="details_error_text">De museumdetails konden niet geladen worden.</string>
     <string name="button_retry">Probeer opnieuw</string>
+
+    <string name="listing_title_exhibition">Expositie</string>
+    <string name="listing_title_event">Activiteit</string>
+    <string name="listing_title_promotion">Museumkaart actie</string>
+    <string name="listing_title_permanent">Collectie</string>
 </resources>

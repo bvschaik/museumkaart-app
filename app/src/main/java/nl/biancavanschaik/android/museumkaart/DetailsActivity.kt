@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
 import android.view.View
+import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.activity_details.address
 import kotlinx.android.synthetic.main.activity_details.content_group
 import kotlinx.android.synthetic.main.activity_details.description
@@ -69,28 +70,28 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun showLoading() {
-        progress.visibility = View.VISIBLE
-        error_group.visibility = View.GONE
-        content_group.visibility = View.GONE
-        exhibitions_group.visibility = View.GONE
-        promotions_group.visibility = View.GONE
-        events_group.visibility = View.GONE
+        progress.isVisible = true
+        error_group.isVisible = false
+        content_group.isVisible = false
+        exhibitions_group.isVisible = false
+        promotions_group.isVisible = false
+        events_group.isVisible = false
     }
 
     private fun showError(message: String) {
         error_text.text = message
-        error_group.visibility = View.VISIBLE
-        progress.visibility = View.GONE
-        content_group.visibility = View.GONE
-        exhibitions_group.visibility = View.GONE
-        promotions_group.visibility = View.GONE
-        events_group.visibility = View.GONE
+        error_group.isVisible = true
+        progress.isVisible = false
+        content_group.isVisible = false
+        exhibitions_group.isVisible = false
+        promotions_group.isVisible = false
+        events_group.isVisible = false
     }
 
     private fun showDetails(museum: Museum) {
-        content_group.visibility = View.VISIBLE
-        error_group.visibility = View.GONE
-        progress.visibility = View.GONE
+        content_group.isVisible = true
+        error_group.isVisible = false
+        progress.isVisible = false
 
         val details = museum.details
         title = details.displayName
@@ -100,12 +101,12 @@ class DetailsActivity : AppCompatActivity() {
         prices.setHtmlText(details.admissionPrice)
         opening_hours.setHtmlText(details.openingHours)
         if (details.website != null) {
-            website.visibility = View.VISIBLE
+            website.isVisible = true
             website.setOnClickListener {
                 openWebsite(details.website)
             }
         } else {
-            website.visibility = View.GONE
+            website.isVisible = false
         }
         details.imagePath?.let { photo.loadLargeImage(it) }
 
@@ -121,12 +122,12 @@ class DetailsActivity : AppCompatActivity() {
 
     private fun showEvents(events: List<Listing>) {
         events_list.adapter = ListingRecyclerViewAdapter(viewModel, events)
-        events_group.visibility = if (events.isEmpty()) View.GONE else View.VISIBLE
+        events_group.isVisible = events.isNotEmpty()
     }
 
     private fun showPromotions(promotions: List<Listing>) {
         promotions_list.adapter = ListingRecyclerViewAdapter(viewModel, promotions)
-        promotions_group.visibility = if (promotions.isEmpty()) View.GONE else View.VISIBLE
+        promotions_group.isVisible = promotions.isNotEmpty()
     }
 
     private fun openWebsite(url: String) {

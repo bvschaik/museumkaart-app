@@ -43,6 +43,7 @@ class ListingRecyclerViewAdapter(
         } else {
             holder.view.photo.setImageResource(0)
         }
+        holder.view.setOnClickListener { viewModel.selectedListingId.value = listing.id }
     }
 
     override fun getItemCount(): Int {

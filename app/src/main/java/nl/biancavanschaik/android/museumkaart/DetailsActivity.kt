@@ -51,6 +51,7 @@ class DetailsActivity : AppCompatActivity() {
 
         viewModel.museumId.value = intent.getStringExtra(ARG_MUSEUM_ID)
         viewModel.museumDetails.observe(this, Observer { showData(it) })
+        viewModel.selectedListingId.observe(this, Observer { it?.let { openListing(it) } })
     }
 
     private fun initRecyclerView(recyclerView: RecyclerView) = recyclerView.apply {
@@ -129,10 +130,14 @@ class DetailsActivity : AppCompatActivity() {
         progress.visibility = View.GONE
     }
 
+    private fun openListing(listingId: String) {
+        startActivity(ListingActivity.createIntent(this, listingId))
+    }
+
     companion object {
         private const val ARG_MUSEUM_ID = "museum_id"
-        fun createIntent(context: Context, page: String) = Intent(context, DetailsActivity::class.java).apply {
-            putExtra(ARG_MUSEUM_ID, page)
+        fun createIntent(context: Context, museum: String) = Intent(context, DetailsActivity::class.java).apply {
+            putExtra(ARG_MUSEUM_ID, museum)
         }
     }
 }

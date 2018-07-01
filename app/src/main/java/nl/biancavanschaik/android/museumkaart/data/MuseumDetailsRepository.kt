@@ -40,6 +40,11 @@ class MuseumDetailsRepository(
         }.asLiveData()
     }
 
+    fun getListing(listingId: String): LiveData<Listing> {
+        // only use the database cache: we cannot get here without having fetched details
+        return museumDao.findListingById(listingId)
+    }
+
     private fun MuseumDetails.toDatabaseObject(cacheItem: Museum?): Museum {
         val details = DbMuseumDetails(
                 id = permanentid,

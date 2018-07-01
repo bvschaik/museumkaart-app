@@ -18,6 +18,9 @@ interface MuseumDao {
     @Query("select * from museums where id = :id")
     fun findById(id: String): LiveData<Museum>
 
+    @Query("select * from listings where id = :id")
+    fun findListingById(id: String): LiveData<Listing>
+
     @Transaction
     fun insert(museum: Museum) {
         insert(museum.details)

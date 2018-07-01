@@ -52,7 +52,7 @@
             android:id="@+id/content_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="photo,description,visited,website,address_title,address,opening_hours_title,opening_hours,prices_title,prices,exhibitions_group"
+            app:constraint_referenced_ids="photo,description,visited,website,address_title,address,opening_hours_title,opening_hours,prices_title,prices,exhibitions_group,events_group,promotions_group"
             />
 
         <ImageView
@@ -190,6 +190,64 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/exhibitions_title"
+            />
+
+        <android.support.constraint.Group
+            android:id="@+id/events_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="events_title,events_list"
+            />
+
+        <TextView
+            android:id="@+id/events_title"
+            style="@style/Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/title_events"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exhibitions_list"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/events_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/events_title"
+            />
+
+        <android.support.constraint.Group
+            android:id="@+id/promotions_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="promotions_title,promotions_list"
+            />
+
+        <TextView
+            android:id="@+id/promotions_title"
+            style="@style/Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/title_promotions"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/events_list"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/promotions_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/promotions_title"
             />
     </android.support.constraint.ConstraintLayout>
 </android.support.v4.widget.NestedScrollView>

@@ -10,18 +10,23 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.activity_details.address
 import kotlinx.android.synthetic.main.activity_details.content_group
 import kotlinx.android.synthetic.main.activity_details.description
 import kotlinx.android.synthetic.main.activity_details.error_group
 import kotlinx.android.synthetic.main.activity_details.error_text
+import kotlinx.android.synthetic.main.activity_details.events_group
+import kotlinx.android.synthetic.main.activity_details.events_list
 import kotlinx.android.synthetic.main.activity_details.exhibitions_group
 import kotlinx.android.synthetic.main.activity_details.exhibitions_list
 import kotlinx.android.synthetic.main.activity_details.opening_hours
 import kotlinx.android.synthetic.main.activity_details.photo
 import kotlinx.android.synthetic.main.activity_details.prices
 import kotlinx.android.synthetic.main.activity_details.progress
+import kotlinx.android.synthetic.main.activity_details.promotions_group
+import kotlinx.android.synthetic.main.activity_details.promotions_list
 import kotlinx.android.synthetic.main.activity_details.website
 import nl.biancavanschaik.android.museumkaart.data.database.model.Listing
 import nl.biancavanschaik.android.museumkaart.data.database.model.Museum
@@ -29,6 +34,7 @@ import nl.biancavanschaik.android.museumkaart.util.Resource
 import nl.biancavanschaik.android.museumkaart.util.loadLargeImage
 import nl.biancavanschaik.android.museumkaart.util.setHtmlText
 import nl.biancavanschaik.android.museumkaart.view.ExhibitionRecyclerViewAdapter
+import nl.biancavanschaik.android.museumkaart.view.ListingRecyclerViewAdapter
 import org.koin.android.architecture.ext.viewModel
 
 class DetailsActivity : AppCompatActivity() {
@@ -39,13 +45,17 @@ class DetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
 
-        exhibitions_list.apply {
-            layoutManager = LinearLayoutManager(context)
-            addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
-        }
+        initRecyclerView(exhibitions_list)
+        initRecyclerView(events_list)
+        initRecyclerView(promotions_list)
 
         viewModel.museumId.value = intent.getStringExtra(ARG_MUSEUM_ID)
         viewModel.museumDetails.observe(this, Observer { showData(it) })
+    }
+
+    private fun initRecyclerView(recyclerView: RecyclerView) = recyclerView.apply {
+        layoutManager = LinearLayoutManager(context)
+        addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
     }
 
     private fun showData(result: Resource<Museum>?) {
@@ -85,11 +95,23 @@ class DetailsActivity : AppCompatActivity() {
         details.imagePath?.let { photo.loadLargeImage(it) }
 
         showExhibitions(museum.exhibitions)
+        showEvents(museum.events)
+        showPromotions(museum.promotions)
     }
 
     private fun showExhibitions(exhibitions: List<Listing>) {
         exhibitions_list.adapter = ExhibitionRecyclerViewAdapter(exhibitions)
         exhibitions_group.visibility = if (exhibitions.isEmpty()) View.GONE else View.VISIBLE
+    }
+
+    private fun showEvents(events: List<Listing>) {
+        events_list.adapter = ListingRecyclerViewAdapter(viewModel, events)
+        events_group.visibility = if (events.isEmpty()) View.GONE else View.VISIBLE
+    }
+
+    private fun showPromotions(promotions: List<Listing>) {
+        promotions_list.adapter = ListingRecyclerViewAdapter(viewModel, promotions)
+        promotions_group.visibility = if (promotions.isEmpty()) View.GONE else View.VISIBLE
     }
 
     private fun openWebsite(url: String) {

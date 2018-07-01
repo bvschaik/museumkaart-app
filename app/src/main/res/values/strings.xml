@@ -12,6 +12,8 @@
     <string name="title_address">Adres</string>
     <string name="title_prices">Toegangsprijzen</string>
     <string name="title_exhibitions">Exposities</string>
+    <string name="title_events">Activiteiten</string>
+    <string name="title_promotions">Museumkaart acties</string>
     <string name="button_website">Website</string>
 
     <string name="details_error_text">De museumdetails konden niet geladen worden.</string>

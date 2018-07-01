@@ -65,7 +65,7 @@ class MuseumDetailsRepository(
                 visitedOn = cacheItem?.details?.visitedOn,
                 wishList = cacheItem?.details?.wishList == true
         )
-        return Museum(details, listings.toDatabaseObject(details))
+        return Museum(details, listings.toDatabaseObject(details).distinctBy { it.id })
     }
 
     private fun Listings.toDatabaseObject(museum: DbMuseumDetails) =

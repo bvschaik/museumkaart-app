@@ -20,7 +20,8 @@ data class MuseumDetails(
         val museumCardParticipant: Boolean,
         val lat: Double?,
         val lon: Double?,
-        val dateFetched: IsoDate?,
-        val visitedOn: IsoDate?,
-        val wishList: Boolean = false
+        val dateFetched: IsoDate? = null,
+        val visitedOn: IsoDate? = null,
+        val wishList: Boolean = false,
+        val active: Boolean = true
 )

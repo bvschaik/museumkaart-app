@@ -8,6 +8,25 @@ import nl.biancavanschaik.android.museumkaart.data.rest.model.MuseumDetails
 import nl.biancavanschaik.android.museumkaart.util.IsoDate
 import nl.biancavanschaik.android.museumkaart.data.database.model.MuseumDetails as DbMuseumDetails
 
+fun List<MuseumDetails>.toDatabaseObject() = map {
+    DbMuseumDetails(
+            id = it.permanentid,
+            numericId = it.id,
+            name = it.displayname,
+            address = it.streetandnumber,
+            city = it.city,
+            telephone = it.telephone,
+            website = it.website,
+            email = it.email,
+            imagePath = it.path,
+            admissionPrice = it.admissionprice,
+            openingHours = it.openinghours,
+            museumCardParticipant = it.museumcardparticipant,
+            lat = it.lat,
+            lon = it.lon
+    )
+}
+
 fun MuseumDetails.toDatabaseObject(cacheItem: Museum?): Museum {
     val details = DbMuseumDetails(
             id = permanentid,

@@ -92,7 +92,7 @@ class DetailsActivity : AppCompatActivity() {
         progress.isVisible = false
 
         val details = museum.details
-        title = details.displayName
+        title = details.name
 
         description.setHtmlText(museum.permanentExhibition?.description)
         address.setHtmlText(arrayOf(details.address, details.city, details.telephone).filterNotNull().joinToString(separator = "<br>"))

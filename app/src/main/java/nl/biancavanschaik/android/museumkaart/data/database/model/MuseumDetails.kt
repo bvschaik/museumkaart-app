@@ -8,7 +8,7 @@ import nl.biancavanschaik.android.museumkaart.util.IsoDate
 data class MuseumDetails(
         @PrimaryKey val id: String,
         val numericId: Long,
-        val displayName: String,
+        val name: String,
         val address: String?,
         val city: String?,
         val telephone: String?,

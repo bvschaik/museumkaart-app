@@ -12,7 +12,7 @@ fun MuseumDetails.toDatabaseObject(cacheItem: Museum?): Museum {
     val details = DbMuseumDetails(
             id = permanentid,
             numericId = id,
-            displayName = displayname,
+            name = displayname,
             address = streetandnumber,
             city = city,
             telephone = telephone,

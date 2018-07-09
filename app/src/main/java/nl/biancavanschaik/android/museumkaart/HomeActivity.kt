@@ -9,7 +9,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_home.message
@@ -25,7 +24,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
     private val viewModel by viewModel<HomeViewModel>()
 
     private var map: GoogleMap? = null
-    private var camera: CameraPosition? = null
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -49,8 +47,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        camera = CameraPreferences(this).load()
-
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
@@ -62,7 +58,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onStop() {
-        camera?.let { CameraPreferences(this).save(it) }
+        map?.cameraPosition?.let { CameraPreferences(this).save(it) }
         super.onStop()
     }
 
@@ -73,7 +69,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         viewModel.allMuseums.observe(this, Observer {
             it?.data?.let { showMuseums(it, googleMap) }
         })
-        val camera = camera
+        val camera = CameraPreferences(this).load()
         if (camera == null) {
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(52.0, 5.0)))
             googleMap.moveCamera(CameraUpdateFactory.zoomTo(6.0f))

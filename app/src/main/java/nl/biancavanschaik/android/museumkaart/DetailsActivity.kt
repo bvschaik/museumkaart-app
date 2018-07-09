@@ -12,7 +12,6 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
-import android.view.View
 import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.activity_details.address
 import kotlinx.android.synthetic.main.activity_details.content_group
@@ -35,7 +34,6 @@ import nl.biancavanschaik.android.museumkaart.data.database.model.Museum
 import nl.biancavanschaik.android.museumkaart.util.Resource
 import nl.biancavanschaik.android.museumkaart.util.loadLargeImage
 import nl.biancavanschaik.android.museumkaart.util.setHtmlText
-import nl.biancavanschaik.android.museumkaart.view.ExhibitionRecyclerViewAdapter
 import nl.biancavanschaik.android.museumkaart.view.ListingRecyclerViewAdapter
 import org.koin.android.architecture.ext.viewModel
 
@@ -116,8 +114,8 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun showExhibitions(exhibitions: List<Listing>) {
-        exhibitions_list.adapter = ExhibitionRecyclerViewAdapter(exhibitions)
-        exhibitions_group.visibility = if (exhibitions.isEmpty()) View.GONE else View.VISIBLE
+        exhibitions_list.adapter = ListingRecyclerViewAdapter(viewModel, exhibitions)
+        exhibitions_group.isVisible = exhibitions.isNotEmpty()
     }
 
     private fun showEvents(events: List<Listing>) {

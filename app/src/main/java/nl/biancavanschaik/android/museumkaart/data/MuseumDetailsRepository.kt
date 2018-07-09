@@ -33,7 +33,7 @@ class MuseumDetailsRepository(
 
             override fun shouldFetch(data: List<MuseumSummary>?): Boolean {
                 // TODO find a way to refresh only once a week or so
-                return true
+                return data == null || data.isEmpty()
                 //return dateFetched == null || dateFetched < IsoDate.today() - 7
             }
 

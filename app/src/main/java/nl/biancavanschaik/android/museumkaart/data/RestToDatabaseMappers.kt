@@ -25,7 +25,7 @@ fun List<MuseumDetails>.toDatabaseObject() = map {
             lat = it.lat,
             lon = it.lon
     )
-}
+}.distinctBy { it.id }
 
 fun MuseumDetails.toDatabaseObject(cacheItem: Museum?): Museum {
     val details = DbMuseumDetails(

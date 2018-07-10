@@ -12,8 +12,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_home.message
-import kotlinx.android.synthetic.main.activity_home.museum_id_button
-import kotlinx.android.synthetic.main.activity_home.museum_id_input
 import kotlinx.android.synthetic.main.activity_home.navigation
 import nl.biancavanschaik.android.museumkaart.data.CameraPreferences
 import nl.biancavanschaik.android.museumkaart.data.database.model.MuseumSummary
@@ -51,10 +49,6 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
-        museum_id_button.setOnClickListener {
-            startActivity(DetailsActivity.createIntent(this, museum_id_input.text.toString()))
-        }
     }
 
     override fun onStop() {

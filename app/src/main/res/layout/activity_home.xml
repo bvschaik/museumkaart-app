@@ -26,23 +26,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/museum_id_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Museum ID"
-        android:inputType="textCapSentences"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/message" />
-
-    <Button
-        android:id="@+id/museum_id_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Toon details"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/museum_id_input" />
-
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="0dp"

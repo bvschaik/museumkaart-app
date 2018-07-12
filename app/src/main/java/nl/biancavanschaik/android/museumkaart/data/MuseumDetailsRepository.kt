@@ -61,6 +61,10 @@ class MuseumDetailsRepository(
         }
     }
 
+    fun getVisitedMuseums() = museumDao.findAllVisited()
+
+    fun getWishListMuseums() = museumDao.findAllOnWishList()
+
     fun getDetails(museumId: String): LiveData<Resource<Museum>> {
         return object : CachedResource<Museum, MuseumDetails>() {
 

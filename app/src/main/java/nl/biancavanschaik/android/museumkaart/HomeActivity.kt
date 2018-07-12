@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_home.visited_museums_list
 import kotlinx.android.synthetic.main.activity_home.wish_list_museums_list
 import nl.biancavanschaik.android.museumkaart.data.CameraPreferences
 import nl.biancavanschaik.android.museumkaart.data.database.model.MuseumSummary
+import nl.biancavanschaik.android.museumkaart.view.VisitedMuseumRecyclerViewAdapter
 import org.koin.android.architecture.ext.viewModel
 
 class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -32,12 +33,13 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
     private var map: GoogleMap? = null
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        return@OnNavigationItemSelectedListener when (item.itemId) {
-            R.id.navigation_home -> { showTab(Tab.MAP); true }
-            R.id.navigation_dashboard -> { showTab(Tab.VISITED); true }
-            R.id.navigation_notifications -> { showTab(Tab.WISH_LIST); true }
-            else -> false
+        when (item.itemId) {
+            R.id.navigation_home -> showTab(Tab.MAP)
+            R.id.navigation_dashboard -> showTab(Tab.VISITED)
+            R.id.navigation_notifications -> showTab(Tab.WISH_LIST)
+            else -> return@OnNavigationItemSelectedListener false
         }
+        true
     }
 
     private fun showTab(tab: Tab) {
@@ -69,6 +71,10 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        viewModel.visitedMuseums.observe(this, Observer { it?.let {
+            visited_museums_list.adapter = VisitedMuseumRecyclerViewAdapter(viewModel, it)
+        }})
     }
 
     override fun onStop() {

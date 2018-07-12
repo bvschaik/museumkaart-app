@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.activity_home.wish_list_museums_list
 import nl.biancavanschaik.android.museumkaart.data.CameraPreferences
 import nl.biancavanschaik.android.museumkaart.data.database.model.MuseumSummary
 import nl.biancavanschaik.android.museumkaart.view.VisitedMuseumRecyclerViewAdapter
+import nl.biancavanschaik.android.museumkaart.view.WishListMuseumRecyclerViewAdapter
 import org.koin.android.architecture.ext.viewModel
 
 class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -74,6 +75,9 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
 
         viewModel.visitedMuseums.observe(this, Observer { it?.let {
             visited_museums_list.adapter = VisitedMuseumRecyclerViewAdapter(viewModel, it)
+        }})
+        viewModel.wishListMuseums.observe(this, Observer { it?.let {
+            wish_list_museums_list.adapter = WishListMuseumRecyclerViewAdapter(viewModel, it)
         }})
     }
 

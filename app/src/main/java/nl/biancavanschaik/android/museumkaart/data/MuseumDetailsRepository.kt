@@ -2,6 +2,8 @@ package nl.biancavanschaik.android.museumkaart.data
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.launch
 import nl.biancavanschaik.android.museumkaart.data.database.MuseumDao
 import nl.biancavanschaik.android.museumkaart.data.database.model.Listing
 import nl.biancavanschaik.android.museumkaart.data.database.model.Museum
@@ -90,7 +92,9 @@ class MuseumDetailsRepository(
     }
 
     fun updateMuseum(museumDetails: MuseumDetails) {
-        museumDao.update(museumDetails)
+        launch(CommonPool) {
+            museumDao.update(museumDetails)
+        }
     }
 
     fun getListing(listingId: String): LiveData<Listing> {

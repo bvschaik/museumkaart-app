@@ -18,4 +18,11 @@ class DetailsViewModel(
     }
 
     val selectedListingId = EventLiveData<String>()
+
+    fun setWishList(onWishList: Boolean) {
+        museumDetails.value?.data?.details?.let {
+            val newDetails = it.copy(wishList = onWishList)
+            museumDetailsRepository.updateMuseum(newDetails)
+        }
+    }
 }

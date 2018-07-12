@@ -18,6 +18,8 @@
     <string name="button_website">Website</string>
 
     <string name="details_error_text">De museumdetails konden niet geladen worden.</string>
+    <string name="details_add_to_wish_list">Voeg toe aan wenslijst</string>
+    <string name="details_remove_from_wish_list">Verwijder van wenslijst</string>
     <string name="button_retry">Probeer opnieuw</string>
 
     <string name="listing_title_exhibition">Expositie</string>

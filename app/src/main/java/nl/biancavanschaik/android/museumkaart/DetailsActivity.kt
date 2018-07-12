@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.Menu
 import android.view.MenuItem
 import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.activity_details.address
@@ -93,6 +94,7 @@ class DetailsActivity : AppCompatActivity() {
 
         val details = museum.details
         title = details.name
+        invalidateOptionsMenu()
 
         description.setHtmlText(museum.permanentExhibition?.description)
         address.setHtmlText(arrayOf(details.address, details.city, details.telephone).filterNotNull().joinToString(separator = "<br>"))
@@ -140,10 +142,30 @@ class DetailsActivity : AppCompatActivity() {
         startActivity(ListingActivity.createIntent(this, listingId))
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.details_toolbar, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        val details = viewModel.museumDetails.value?.data?.details
+        menu.findItem(R.id.menu_add_to_wish_list)?.isVisible = details?.wishList == false
+        menu.findItem(R.id.menu_remove_from_wish_list)?.isVisible = details?.wishList == true
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
+                return true
+            }
+            R.id.menu_add_to_wish_list -> {
+                viewModel.setWishList(true)
+                return true
+            }
+            R.id.menu_remove_from_wish_list -> {
+                viewModel.setWishList(false)
                 return true
             }
         }

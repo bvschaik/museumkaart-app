@@ -34,9 +34,9 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
-            R.id.navigation_home -> showTab(Tab.MAP)
-            R.id.navigation_dashboard -> showTab(Tab.VISITED)
-            R.id.navigation_notifications -> showTab(Tab.WISH_LIST)
+            R.id.navigation_map -> showTab(Tab.MAP)
+            R.id.navigation_visited -> showTab(Tab.VISITED)
+            R.id.navigation_wish_list -> showTab(Tab.WISH_LIST)
             else -> return@OnNavigationItemSelectedListener false
         }
         true

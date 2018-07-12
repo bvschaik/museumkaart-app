@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Museumkaart</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_map">Kaart</string>
+    <string name="title_visited">Bezocht</string>
+    <string name="title_wish_list">Wenslijst</string>
 
     <string name="period_description">%1$s t/m %2$s</string>
 

@@ -2,13 +2,13 @@ package nl.biancavanschaik.android.museumkaart.data
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
-import android.util.Log
 import nl.biancavanschaik.android.museumkaart.data.database.MuseumDao
 import nl.biancavanschaik.android.museumkaart.data.database.model.Listing
 import nl.biancavanschaik.android.museumkaart.data.database.model.Museum
+import nl.biancavanschaik.android.museumkaart.data.database.model.MuseumDetails
 import nl.biancavanschaik.android.museumkaart.data.database.model.MuseumSummary
 import nl.biancavanschaik.android.museumkaart.data.rest.MuseumRestService
-import nl.biancavanschaik.android.museumkaart.data.rest.model.MuseumDetails
+import nl.biancavanschaik.android.museumkaart.data.rest.model.RestMuseum as RestMuseumDetails
 import nl.biancavanschaik.android.museumkaart.util.IsoDate
 import nl.biancavanschaik.android.museumkaart.util.Resource
 import nl.biancavanschaik.android.museumkaart.util.rest.ApiEmptyResponse
@@ -21,13 +21,13 @@ class MuseumDetailsRepository(
         private val museumDao: MuseumDao
 ) {
     fun getAllMuseums(): LiveData<Resource<List<MuseumSummary>>> {
-        return object : CachedResource<List<MuseumSummary>, List<MuseumDetails>>() {
+        return object : CachedResource<List<MuseumSummary>, List<RestMuseumDetails>>() {
 
             override fun loadFromCache(): LiveData<List<MuseumSummary>> {
                 return museumDao.findAll()
             }
 
-            override fun saveCallResult(item: List<MuseumDetails>, cacheItem: List<MuseumSummary>?) {
+            override fun saveCallResult(item: List<RestMuseumDetails>, cacheItem: List<MuseumSummary>?) {
                 museumDao.updateAll(item.toDatabaseObject(), cacheItem ?: emptyList())
             }
 
@@ -38,13 +38,13 @@ class MuseumDetailsRepository(
             }
 
             override fun createCall() =
-                    MediatorLiveData<ApiResponse<List<MuseumDetails>>>().apply {
+                    MediatorLiveData<ApiResponse<List<RestMuseumDetails>>>().apply {
                         getNextPage(this, 0, emptyList())
                     }
         }.asLiveData()
     }
 
-    private fun getNextPage(mediator: MediatorLiveData<ApiResponse<List<MuseumDetails>>>, pageId: Int, data: List<MuseumDetails>) {
+    private fun getNextPage(mediator: MediatorLiveData<ApiResponse<List<RestMuseumDetails>>>, pageId: Int, data: List<RestMuseumDetails>) {
         val restLiveData = museumRestService.getList(pageId)
         mediator.addSource(restLiveData) { pageData ->
             mediator.removeSource(restLiveData)
@@ -66,13 +66,13 @@ class MuseumDetailsRepository(
     fun getWishListMuseums() = museumDao.findAllOnWishList()
 
     fun getDetails(museumId: String): LiveData<Resource<Museum>> {
-        return object : CachedResource<Museum, MuseumDetails>() {
+        return object : CachedResource<Museum, RestMuseumDetails>() {
 
             override fun loadFromCache(): LiveData<Museum> {
                 return museumDao.findById(museumId)
             }
 
-            override fun saveCallResult(item: MuseumDetails, cacheItem: Museum?) {
+            override fun saveCallResult(item: RestMuseumDetails, cacheItem: Museum?) {
                 val museum = item.toDatabaseObject(cacheItem)
                 if (cacheItem == null) {
                     museumDao.insert(museum)
@@ -87,6 +87,10 @@ class MuseumDetailsRepository(
 
             override fun createCall() = museumRestService.getDetails(museumId)
         }.asLiveData()
+    }
+
+    fun updateMuseum(museumDetails: MuseumDetails) {
+        museumDao.update(museumDetails)
     }
 
     fun getListing(listingId: String): LiveData<Listing> {

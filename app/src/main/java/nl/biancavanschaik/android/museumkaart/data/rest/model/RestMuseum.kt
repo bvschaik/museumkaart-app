@@ -1,6 +1,6 @@
 package nl.biancavanschaik.android.museumkaart.data.rest.model
 
-data class MuseumDetails (
+data class RestMuseum (
         val id: Long,
         val permanentid: String,
         val displayname: String,

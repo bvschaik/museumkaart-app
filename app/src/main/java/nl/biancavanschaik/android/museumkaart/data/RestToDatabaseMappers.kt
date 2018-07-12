@@ -4,12 +4,12 @@ import nl.biancavanschaik.android.museumkaart.data.database.model.Listing
 import nl.biancavanschaik.android.museumkaart.data.database.model.Museum
 import nl.biancavanschaik.android.museumkaart.data.rest.model.Exhibition
 import nl.biancavanschaik.android.museumkaart.data.rest.model.Listings
-import nl.biancavanschaik.android.museumkaart.data.rest.model.MuseumDetails
+import nl.biancavanschaik.android.museumkaart.data.rest.model.RestMuseum
 import nl.biancavanschaik.android.museumkaart.util.IsoDate
-import nl.biancavanschaik.android.museumkaart.data.database.model.MuseumDetails as DbMuseumDetails
+import nl.biancavanschaik.android.museumkaart.data.database.model.MuseumDetails
 
-fun List<MuseumDetails>.toDatabaseObject() = map {
-    DbMuseumDetails(
+fun List<RestMuseum>.toDatabaseObject() = map {
+    MuseumDetails(
             id = it.permanentid,
             numericId = it.id,
             name = it.displayname,
@@ -27,8 +27,8 @@ fun List<MuseumDetails>.toDatabaseObject() = map {
     )
 }.distinctBy { it.id }
 
-fun MuseumDetails.toDatabaseObject(cacheItem: Museum?): Museum {
-    val details = DbMuseumDetails(
+fun RestMuseum.toDatabaseObject(cacheItem: Museum?): Museum {
+    val details = MuseumDetails(
             id = permanentid,
             numericId = id,
             name = displayname,
@@ -50,13 +50,13 @@ fun MuseumDetails.toDatabaseObject(cacheItem: Museum?): Museum {
     return Museum(details, listings.toDatabaseObject(details).distinctBy { it.id })
 }
 
-private fun Listings.toDatabaseObject(museum: DbMuseumDetails) =
+private fun Listings.toDatabaseObject(museum: MuseumDetails) =
         permanent.map { it.toDatabaseObject(museum, Listing.Type.PERMANENT) } +
                 exhibition.map { it.toDatabaseObject(museum, Listing.Type.EXHIBITION) } +
                 promotion.map { it.toDatabaseObject(museum, Listing.Type.PROMOTION) } +
                 event.map { it.toDatabaseObject(museum, Listing.Type.EVENT) }
 
-private fun Exhibition.toDatabaseObject(museum: DbMuseumDetails, type: Listing.Type) =
+private fun Exhibition.toDatabaseObject(museum: MuseumDetails, type: Listing.Type) =
         Listing(
                 id = permanentid,
                 numericId = id,

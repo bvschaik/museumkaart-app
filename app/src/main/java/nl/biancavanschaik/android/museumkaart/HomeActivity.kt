@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import androidx.core.view.isVisible
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -11,6 +12,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_home.navigation
 import kotlinx.android.synthetic.main.activity_home.visited_museums_list
@@ -32,6 +34,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
     private val viewModel by viewModel<HomeViewModel>()
 
     private var map: GoogleMap? = null
+    private val mapMarkers = mutableMapOf<String, Marker>()
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -102,20 +105,35 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun showMuseums(it: List<MuseumSummary>, googleMap: GoogleMap) {
+    private fun showMuseums(museums: List<MuseumSummary>, googleMap: GoogleMap) {
+        Log.d("MAP", "Updating with ${museums.size} museums")
         val unvisitedIcon = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_red)
         val visitedIcon = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_green)
-        it.forEach {
+
+        // remove deleted museums
+        val toRemove = mapMarkers - museums.map { it.id }
+        toRemove.forEach { key, marker -> mapMarkers.remove(key); marker.remove() }
+
+        museums.forEach {
             if (it.lat != null && it.lon != null) {
                 val position = LatLng(it.lat, it.lon)
                 val visitedText = if (it.visitedOn != null) " (${it.visitedOn.toIsoString()})" else ""
-                googleMap.addMarker(MarkerOptions()
-                        .position(position)
-                        .title(it.name)
-                        .snippet(visitedText)
-                        .icon(if (it.visitedOn != null) visitedIcon else unvisitedIcon)
-                        .anchor(0.5f, 0.5f)
-                ).tag = it.id
+                val icon = if (it.visitedOn != null) visitedIcon else unvisitedIcon
+                val existingMarker = mapMarkers[it.id]
+                if (existingMarker == null) {
+                    mapMarkers[it.id] = googleMap.addMarker(MarkerOptions()
+                            .position(position)
+                            .title(it.name)
+                            .snippet(visitedText)
+                            .icon(icon)
+                            .anchor(0.5f, 0.5f)
+                    ).apply { tag = it.id }
+                } else {
+                    existingMarker.position = position
+                    existingMarker.title = it.name
+                    existingMarker.snippet = visitedText
+                    existingMarker.setIcon(icon)
+                }
             }
         }
     }

@@ -3,4 +3,5 @@
     <dimen name="activity_margin">16dp</dimen>
 
     <dimen name="margin_small">8dp</dimen>
+    <dimen name="list_item_height">56dp</dimen>
 </resources>

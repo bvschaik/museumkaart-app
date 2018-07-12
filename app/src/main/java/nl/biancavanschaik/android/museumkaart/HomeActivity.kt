@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -11,34 +12,53 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.main.activity_home.message
 import kotlinx.android.synthetic.main.activity_home.navigation
+import kotlinx.android.synthetic.main.activity_home.visited_museums_list
+import kotlinx.android.synthetic.main.activity_home.wish_list_museums_list
 import nl.biancavanschaik.android.museumkaart.data.CameraPreferences
 import nl.biancavanschaik.android.museumkaart.data.database.model.MuseumSummary
 import org.koin.android.architecture.ext.viewModel
 
 class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
 
+    enum class Tab {
+        MAP,
+        VISITED,
+        WISH_LIST
+    }
+
     private val viewModel by viewModel<HomeViewModel>()
 
     private var map: GoogleMap? = null
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.navigation_home -> {
-                message.setText(R.string.title_home)
-                return@OnNavigationItemSelectedListener true
+        return@OnNavigationItemSelectedListener when (item.itemId) {
+            R.id.navigation_home -> { showTab(Tab.MAP); true }
+            R.id.navigation_dashboard -> { showTab(Tab.VISITED); true }
+            R.id.navigation_notifications -> { showTab(Tab.WISH_LIST); true }
+            else -> false
+        }
+    }
+
+    private fun showTab(tab: Tab) {
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map_fragment)
+        when (tab) {
+            Tab.MAP -> {
+                supportFragmentManager.beginTransaction().show(mapFragment).commit()
+                visited_museums_list.isVisible = false
+                wish_list_museums_list.isVisible = false
             }
-            R.id.navigation_dashboard -> {
-                message.setText(R.string.title_dashboard)
-                return@OnNavigationItemSelectedListener true
+            Tab.VISITED -> {
+                supportFragmentManager.beginTransaction().hide(mapFragment).commit()
+                visited_museums_list.isVisible = true
+                wish_list_museums_list.isVisible = false
             }
-            R.id.navigation_notifications -> {
-                message.setText(R.string.title_notifications)
-                return@OnNavigationItemSelectedListener true
+            Tab.WISH_LIST -> {
+                supportFragmentManager.beginTransaction().hide(mapFragment).commit()
+                visited_museums_list.isVisible = false
+                wish_list_museums_list.isVisible = true
             }
         }
-        false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

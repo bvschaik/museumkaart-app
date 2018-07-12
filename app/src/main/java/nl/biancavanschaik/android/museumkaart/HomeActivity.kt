@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_home.visited_museums_list
 import kotlinx.android.synthetic.main.activity_home.wish_list_museums_list
 import nl.biancavanschaik.android.museumkaart.data.CameraPreferences
 import nl.biancavanschaik.android.museumkaart.data.database.model.MuseumSummary
+import nl.biancavanschaik.android.museumkaart.util.getBitmapFromVectorDrawable
 import nl.biancavanschaik.android.museumkaart.view.VisitedMuseumRecyclerViewAdapter
 import nl.biancavanschaik.android.museumkaart.view.WishListMuseumRecyclerViewAdapter
 import org.koin.android.architecture.ext.viewModel
@@ -107,8 +108,9 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun showMuseums(museums: List<MuseumSummary>, googleMap: GoogleMap) {
         Log.d("MAP", "Updating with ${museums.size} museums")
-        val unvisitedIcon = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_red)
-        val visitedIcon = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_green)
+        val wishListIcon = BitmapDescriptorFactory.fromBitmap(getBitmapFromVectorDrawable(R.drawable.ic_marker_purple))
+        val unvisitedIcon = BitmapDescriptorFactory.fromBitmap(getBitmapFromVectorDrawable(R.drawable.ic_marker_red))
+        val visitedIcon = BitmapDescriptorFactory.fromBitmap(getBitmapFromVectorDrawable(R.drawable.ic_marker_green))
 
         // remove deleted museums
         val toRemove = mapMarkers - museums.map { it.id }
@@ -117,8 +119,12 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         museums.forEach {
             if (it.lat != null && it.lon != null) {
                 val position = LatLng(it.lat, it.lon)
-                val visitedText = if (it.visitedOn != null) " (${it.visitedOn.toIsoString()})" else ""
-                val icon = if (it.visitedOn != null) visitedIcon else unvisitedIcon
+                val visitedText = if (it.visitedOn != null) "${it.city} (${it.visitedOn.toHumanString()})" else it.city
+                val icon = when {
+                    it.visitedOn != null -> visitedIcon
+                    it.wishList -> wishListIcon
+                    else -> unvisitedIcon
+                }
                 val existingMarker = mapMarkers[it.id]
                 if (existingMarker == null) {
                     mapMarkers[it.id] = googleMap.addMarker(MarkerOptions()

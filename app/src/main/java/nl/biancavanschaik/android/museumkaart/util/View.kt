@@ -19,7 +19,6 @@ private fun ImageView.loadImage(size: String, path: String) {
 
 fun TextView.setHtmlText(text: String?) {
     val trimmedText = text?.trimHtml()
-    Log.w("HTML", "$text -> $trimmedText")
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         this.text = Html.fromHtml(trimmedText ?: "?", Html.FROM_HTML_MODE_COMPACT)
     } else {

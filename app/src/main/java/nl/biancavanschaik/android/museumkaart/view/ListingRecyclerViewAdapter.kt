@@ -26,7 +26,6 @@ class ListingRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val listing = listings[position]
-        Log.w("LISTING", "Binding viewholder to $listing")
         holder.view.title.text = listing.name
         if (listing.startDate != null && listing.endDate != null) {
             holder.view.period.text = holder.view.context.getString(

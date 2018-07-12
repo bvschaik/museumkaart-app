@@ -16,13 +16,13 @@ import nl.biancavanschaik.android.museumkaart.data.database.model.MuseumSummary
 @Dao
 interface MuseumDao {
 
-    @Query("select id, name, lat, lon, visitedOn, wishList from museums where active = 1")
+    @Query("select id, name, city, lat, lon, visitedOn, wishList from museums where active = 1")
     fun findAll(): LiveData<List<MuseumSummary>>
 
-    @Query("select id, name, lat, lon, visitedOn, wishList from museums where active = 1 and visitedOn is not null")
+    @Query("select id, name, city, lat, lon, visitedOn, wishList from museums where active = 1 and visitedOn is not null order by visitedOn desc")
     fun findAllVisited(): LiveData<List<MuseumSummary>>
 
-    @Query("select id, name, lat, lon, visitedOn, wishList from museums where active = 1 and wishList = 1")
+    @Query("select id, name, city, lat, lon, visitedOn, wishList from museums where active = 1 and wishList = 1 order by name")
     fun findAllOnWishList(): LiveData<List<MuseumSummary>>
 
     @Transaction

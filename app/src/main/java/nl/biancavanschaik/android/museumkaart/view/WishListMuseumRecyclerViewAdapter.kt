@@ -23,7 +23,7 @@ class WishListMuseumRecyclerViewAdapter(
     override fun onBindViewHolder(holder: MuseumViewHolder, position: Int) {
         val museum = museums[position]
         holder.view.title.text = museum.name
-        holder.view.description.text = museum.name
+        holder.view.description.text = museum.city
         holder.view.setOnClickListener { viewModel.selectedMuseumId.value = museum.id }
     }
 

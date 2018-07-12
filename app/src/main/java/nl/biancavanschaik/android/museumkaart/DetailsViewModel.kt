@@ -5,6 +5,7 @@ import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
 import nl.biancavanschaik.android.museumkaart.data.MuseumDetailsRepository
 import nl.biancavanschaik.android.museumkaart.data.database.model.Museum
+import nl.biancavanschaik.android.museumkaart.util.IsoDate
 import nl.biancavanschaik.android.museumkaart.util.Resource
 import nl.biancavanschaik.android.museumkaart.util.livedata.EventLiveData
 import nl.biancavanschaik.android.museumkaart.util.livedata.InputLiveData
@@ -22,6 +23,13 @@ class DetailsViewModel(
     fun setWishList(onWishList: Boolean) {
         museumDetails.value?.data?.details?.let {
             val newDetails = it.copy(wishList = onWishList)
+            museumDetailsRepository.updateMuseum(newDetails)
+        }
+    }
+
+    fun setVisitedOn(visitedOn: IsoDate?) {
+        museumDetails.value?.data?.details?.let {
+            val newDetails = it.copy(visitedOn = visitedOn)
             museumDetailsRepository.updateMuseum(newDetails)
         }
     }

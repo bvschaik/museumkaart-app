@@ -20,7 +20,10 @@
     <string name="details_error_text">De museumdetails konden niet geladen worden.</string>
     <string name="details_add_to_wish_list">Voeg toe aan wenslijst</string>
     <string name="details_remove_from_wish_list">Verwijder van wenslijst</string>
+    <string name="details_mark_visited">Bezocht op…</string>
+    <string name="details_visited_on">Bezocht op %s</string>
     <string name="button_retry">Probeer opnieuw</string>
+    <string name="button_clear">Wis</string>
 
     <string name="listing_title_exhibition">Expositie</string>
     <string name="listing_title_event">Activiteit</string>

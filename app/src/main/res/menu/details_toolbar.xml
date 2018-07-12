@@ -12,4 +12,9 @@
         android:icon="@drawable/ic_wish_list"
         android:title="@string/details_remove_from_wish_list"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_mark_visited"
+        android:title="@string/details_mark_visited"
+        app:showAsAction="never" />
 </menu>

@@ -1,7 +1,9 @@
 package nl.biancavanschaik.android.museumkaart
 
+import android.app.DatePickerDialog
 import android.arch.lifecycle.Observer
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -29,9 +31,11 @@ import kotlinx.android.synthetic.main.activity_details.prices
 import kotlinx.android.synthetic.main.activity_details.progress
 import kotlinx.android.synthetic.main.activity_details.promotions_group
 import kotlinx.android.synthetic.main.activity_details.promotions_list
+import kotlinx.android.synthetic.main.activity_details.visited
 import kotlinx.android.synthetic.main.activity_details.website
 import nl.biancavanschaik.android.museumkaart.data.database.model.Listing
 import nl.biancavanschaik.android.museumkaart.data.database.model.Museum
+import nl.biancavanschaik.android.museumkaart.util.IsoDate
 import nl.biancavanschaik.android.museumkaart.util.Resource
 import nl.biancavanschaik.android.museumkaart.util.loadLargeImage
 import nl.biancavanschaik.android.museumkaart.util.setHtmlText
@@ -96,6 +100,7 @@ class DetailsActivity : AppCompatActivity() {
         title = details.name
         invalidateOptionsMenu()
 
+        visited.text = details.visitedOn?.let { getString(R.string.details_visited_on, it.toHumanString()) }
         description.setHtmlText(museum.permanentExhibition?.description)
         address.setHtmlText(arrayOf(details.address, details.city, details.telephone).filterNotNull().joinToString(separator = "<br>"))
         prices.setHtmlText(details.admissionPrice)
@@ -156,20 +161,26 @@ class DetailsActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> {
-                onBackPressed()
-                return true
-            }
-            R.id.menu_add_to_wish_list -> {
-                viewModel.setWishList(true)
-                return true
-            }
-            R.id.menu_remove_from_wish_list -> {
-                viewModel.setWishList(false)
-                return true
-            }
+            android.R.id.home -> onBackPressed()
+            R.id.menu_add_to_wish_list -> viewModel.setWishList(true)
+            R.id.menu_remove_from_wish_list -> viewModel.setWishList(false)
+            R.id.menu_mark_visited -> showMarkVisitedDialog()
+            else -> return super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
+        return true
+    }
+
+    private fun showMarkVisitedDialog() {
+        val dateVisited = viewModel.museumDetails.value?.data?.details?.visitedOn ?: IsoDate.today()
+        showDatePicker(dateVisited, { viewModel.setVisitedOn(it) }, { viewModel.setVisitedOn(null) })
+    }
+
+    private fun showDatePicker(initialDate: IsoDate, onSet: (IsoDate) -> Unit, onClear: () -> Unit) {
+        DatePickerDialog(this, { _, year, month0, day ->
+            onSet(IsoDate(year, month0 + 1, day))
+        }, initialDate.year, initialDate.month - 1, initialDate.day)
+                .apply { setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.button_clear)) { _, _ -> onClear() } }
+                .show()
     }
 
     companion object {

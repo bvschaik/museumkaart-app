@@ -12,13 +12,15 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.maps.android.clustering.ClusterManager
+import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import kotlinx.android.synthetic.main.activity_home.navigation
 import kotlinx.android.synthetic.main.activity_home.visited_museums_list
 import kotlinx.android.synthetic.main.activity_home.wish_list_museums_list
 import nl.biancavanschaik.android.museumkaart.data.CameraPreferences
 import nl.biancavanschaik.android.museumkaart.data.database.model.MuseumSummary
+import nl.biancavanschaik.android.museumkaart.map.MuseumItem
 import nl.biancavanschaik.android.museumkaart.util.getBitmapFromVectorDrawable
 import nl.biancavanschaik.android.museumkaart.view.VisitedMuseumRecyclerViewAdapter
 import nl.biancavanschaik.android.museumkaart.view.WishListMuseumRecyclerViewAdapter
@@ -35,7 +37,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
     private val viewModel by viewModel<HomeViewModel>()
 
     private var map: GoogleMap? = null
-    private val mapMarkers = mutableMapOf<String, Marker>()
+    private val museumItems = mutableMapOf<String, MuseumItem>()
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -92,10 +94,10 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         this.map = googleMap
-        googleMap.setOnInfoWindowClickListener { openDetails(it.tag as String) }
+        val clusterManager = setupClusterManager(googleMap)
 
         viewModel.allMuseums.observe(this, Observer {
-            it?.data?.let { showMuseums(it, googleMap) }
+            it?.data?.let { showMuseums(it, clusterManager) }
         })
         val camera = CameraPreferences(this).load()
         if (camera == null) {
@@ -106,15 +108,30 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun showMuseums(museums: List<MuseumSummary>, googleMap: GoogleMap) {
+    private fun setupClusterManager(googleMap: GoogleMap): ClusterManager<MuseumItem> {
+        val clusterManager = ClusterManager<MuseumItem>(this, googleMap)
+        clusterManager.renderer = object : DefaultClusterRenderer<MuseumItem>(this, googleMap, clusterManager) {
+            override fun onBeforeClusterItemRendered(item: MuseumItem, markerOptions: MarkerOptions) {
+                markerOptions.icon(item.icon)
+            }
+        }
+        clusterManager.setOnClusterItemInfoWindowClickListener {
+            openDetails(it.id)
+        }
+        googleMap.setOnInfoWindowClickListener(clusterManager)
+        googleMap.setOnCameraIdleListener(clusterManager)
+        return clusterManager
+    }
+
+    private fun showMuseums(museums: List<MuseumSummary>, clusterManager: ClusterManager<MuseumItem>) {
         Log.d("MAP", "Updating with ${museums.size} museums")
         val wishListIcon = BitmapDescriptorFactory.fromBitmap(getBitmapFromVectorDrawable(R.drawable.ic_marker_purple))
         val unvisitedIcon = BitmapDescriptorFactory.fromBitmap(getBitmapFromVectorDrawable(R.drawable.ic_marker_red))
         val visitedIcon = BitmapDescriptorFactory.fromBitmap(getBitmapFromVectorDrawable(R.drawable.ic_marker_green))
 
         // remove deleted museums
-        val toRemove = mapMarkers - museums.map { it.id }
-        toRemove.forEach { key, marker -> mapMarkers.remove(key); marker.remove() }
+        val toRemove = museumItems - museums.map { it.id }
+        toRemove.forEach { key, item -> museumItems.remove(key); clusterManager.removeItem(item) }
 
         museums.forEach {
             if (it.lat != null && it.lon != null) {
@@ -125,21 +142,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
                     it.wishList -> wishListIcon
                     else -> unvisitedIcon
                 }
-                val existingMarker = mapMarkers[it.id]
-                if (existingMarker == null) {
-                    mapMarkers[it.id] = googleMap.addMarker(MarkerOptions()
-                            .position(position)
-                            .title(it.name)
-                            .snippet(visitedText)
-                            .icon(icon)
-                            .anchor(0.5f, 0.5f)
-                    ).apply { tag = it.id }
-                } else {
-                    existingMarker.position = position
-                    existingMarker.title = it.name
-                    existingMarker.snippet = visitedText
-                    existingMarker.setIcon(icon)
-                }
+                clusterManager.addItem(MuseumItem(it.id, position, it.name, visitedText, icon))
             }
         }
     }

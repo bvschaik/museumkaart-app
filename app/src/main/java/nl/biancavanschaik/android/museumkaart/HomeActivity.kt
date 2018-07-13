@@ -116,7 +116,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
         clusterManager.setOnClusterItemInfoWindowClickListener {
-            openDetails(it.id)
+            openDetails(it.id, it.title)
         }
         googleMap.setOnInfoWindowClickListener(clusterManager)
         googleMap.setOnCameraIdleListener(clusterManager)
@@ -147,7 +147,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun openDetails(museumId: String) {
-        startActivity(DetailsActivity.createIntent(this, museumId))
+    private fun openDetails(museumId: String, museumName: String) {
+        startActivity(DetailsActivity.createIntent(this, museumId, museumName))
     }
 }

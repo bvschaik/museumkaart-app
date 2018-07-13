@@ -98,6 +98,7 @@ class DetailsActivity : AppCompatActivity() {
         progress.isVisible = false
 
         val details = museum.details
+        title = details.name
         invalidateOptionsMenu()
 
         visited.text = details.visitedOn?.let { getString(R.string.details_visited_on, it.toHumanString()) }

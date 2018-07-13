@@ -9,7 +9,8 @@ class MuseumItem(
         private val position: LatLng,
         private val museumName: String,
         private val snippet: String,
-        val icon: BitmapDescriptor) : ClusterItem {
+        val icon: BitmapDescriptor
+) : ClusterItem {
 
     override fun getPosition() = position
 

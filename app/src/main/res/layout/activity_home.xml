@@ -26,9 +26,11 @@
         android:layout_marginBottom="24dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/ic_my_location_inactive"
+        android:visibility="gone"
         app:backgroundTint="#ffffff"
         app:layout_constraintBottom_toTopOf="@+id/navigation"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/visited_museums_list"

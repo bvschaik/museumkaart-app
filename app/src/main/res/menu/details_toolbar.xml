@@ -14,6 +14,12 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/menu_navigate"
+        android:icon="@drawable/ic_navigate"
+        android:title="@string/details_navigate"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/menu_mark_visited"
         android:title="@string/details_mark_visited"
         app:showAsAction="never" />

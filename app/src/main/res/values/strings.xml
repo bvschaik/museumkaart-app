@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="NL_nl">
     <string name="app_name">Museumkaart</string>
     <string name="title_map">Kaart</string>
     <string name="title_visited">Bezocht</string>
@@ -20,6 +20,7 @@
     <string name="details_error_text">De museumdetails konden niet geladen worden.</string>
     <string name="details_add_to_wish_list">Voeg toe aan wenslijst</string>
     <string name="details_remove_from_wish_list">Verwijder van wenslijst</string>
+    <string name="details_navigate">Navigeer</string>
     <string name="details_mark_visited">Bezocht op…</string>
     <string name="details_visited_on">Bezocht op %s</string>
     <string name="button_retry">Probeer opnieuw</string>

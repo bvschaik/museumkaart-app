@@ -35,6 +35,7 @@ import kotlinx.android.synthetic.main.activity_details.visited
 import kotlinx.android.synthetic.main.activity_details.website
 import nl.biancavanschaik.android.museumkaart.data.database.model.Listing
 import nl.biancavanschaik.android.museumkaart.data.database.model.Museum
+import nl.biancavanschaik.android.museumkaart.data.database.model.MuseumDetails
 import nl.biancavanschaik.android.museumkaart.util.IsoDate
 import nl.biancavanschaik.android.museumkaart.util.Resource
 import nl.biancavanschaik.android.museumkaart.util.loadLargeImage
@@ -164,11 +165,17 @@ class DetailsActivity : AppCompatActivity() {
         when (item.itemId) {
             android.R.id.home -> onBackPressed()
             R.id.menu_add_to_wish_list -> viewModel.setWishList(true)
+            R.id.menu_navigate -> startNavigation(viewModel.museumDetails.value!!.data!!.details)
             R.id.menu_remove_from_wish_list -> viewModel.setWishList(false)
             R.id.menu_mark_visited -> showMarkVisitedDialog()
             else -> return super.onOptionsItemSelected(item)
         }
         return true
+    }
+
+    private fun startNavigation(details: MuseumDetails) {
+        val geoUrl = Uri.parse("geo:0,0?q=${details.lat},${details.lon} (${details.name})")
+        startActivity(Intent(android.content.Intent.ACTION_VIEW, geoUrl))
     }
 
     private fun showMarkVisitedDialog() {

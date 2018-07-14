@@ -1,8 +1,13 @@
 package nl.biancavanschaik.android.museumkaart
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import androidx.core.view.isVisible
@@ -94,6 +99,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         this.map = googleMap
+        requestPermission(googleMap)
+        googleMap.uiSettings.isMapToolbarEnabled = false
         val clusterManager = setupClusterManager(googleMap)
 
         viewModel.allMuseums.observe(this, Observer {
@@ -105,6 +112,29 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
             googleMap.moveCamera(CameraUpdateFactory.zoomTo(6.0f))
         } else {
             googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(camera))
+        }
+    }
+
+    private fun requestPermission(googleMap: GoogleMap) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            googleMap.isMyLocationEnabled = true
+        } else {
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                ActivityCompat.requestPermissions(this,
+                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), MY_PERMISSIONS_REQUEST_ACCESS_LOCATION)
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            MY_PERMISSIONS_REQUEST_ACCESS_LOCATION -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    @SuppressLint("MissingPermission")
+                    map?.isMyLocationEnabled = true
+                }
+            }
         }
     }
 
@@ -151,3 +181,4 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         startActivity(DetailsActivity.createIntent(this, museumId, museumName))
     }
 }
+private const val MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1

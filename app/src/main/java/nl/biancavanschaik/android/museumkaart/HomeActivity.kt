@@ -1,15 +1,14 @@
 package nl.biancavanschaik.android.museumkaart
 
-import android.Manifest
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.View
 import androidx.core.view.isVisible
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -20,13 +19,19 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.clustering.view.DefaultClusterRenderer
+import kotlinx.android.synthetic.main.activity_home.my_location_fab
 import kotlinx.android.synthetic.main.activity_home.navigation
 import kotlinx.android.synthetic.main.activity_home.visited_museums_list
 import kotlinx.android.synthetic.main.activity_home.wish_list_museums_list
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 import nl.biancavanschaik.android.museumkaart.data.CameraPreferences
 import nl.biancavanschaik.android.museumkaart.data.database.model.MuseumSummary
 import nl.biancavanschaik.android.museumkaart.map.MuseumItem
 import nl.biancavanschaik.android.museumkaart.util.getBitmapFromVectorDrawable
+import nl.biancavanschaik.android.museumkaart.util.hasPermission
+import nl.biancavanschaik.android.museumkaart.util.requestPermission
 import nl.biancavanschaik.android.museumkaart.view.VisitedMuseumRecyclerViewAdapter
 import nl.biancavanschaik.android.museumkaart.view.WishListMuseumRecyclerViewAdapter
 import org.koin.android.architecture.ext.viewModel
@@ -43,6 +48,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private var map: GoogleMap? = null
     private val museumItems = mutableMapOf<String, MuseumItem>()
+    private lateinit var myLocationButton: View
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -82,14 +88,19 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
+        myLocationButton = mapFragment.view!!.findViewById("2".toInt())
         mapFragment.getMapAsync(this)
 
-        viewModel.visitedMuseums.observe(this, Observer { it?.let {
-            visited_museums_list.adapter = VisitedMuseumRecyclerViewAdapter(viewModel, it)
-        }})
-        viewModel.wishListMuseums.observe(this, Observer { it?.let {
-            wish_list_museums_list.adapter = WishListMuseumRecyclerViewAdapter(viewModel, it)
-        }})
+        viewModel.visitedMuseums.observe(this, Observer {
+            it?.let {
+                visited_museums_list.adapter = VisitedMuseumRecyclerViewAdapter(viewModel, it)
+            }
+        })
+        viewModel.wishListMuseums.observe(this, Observer {
+            it?.let {
+                wish_list_museums_list.adapter = WishListMuseumRecyclerViewAdapter(viewModel, it)
+            }
+        })
     }
 
     override fun onStop() {
@@ -99,8 +110,8 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         this.map = googleMap
-        requestPermission(googleMap)
         googleMap.uiSettings.isMapToolbarEnabled = false
+        setupNavigatingToPosition(googleMap)
         val clusterManager = setupClusterManager(googleMap)
 
         viewModel.allMuseums.observe(this, Observer {
@@ -115,24 +126,39 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun requestPermission(googleMap: GoogleMap) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            googleMap.isMyLocationEnabled = true
+    private fun setupNavigatingToPosition(googleMap: GoogleMap) {
+        my_location_fab.visibility = View.VISIBLE
+        if (hasPermission(ACCESS_FINE_LOCATION)) {
+            enableNavigatingToPosition(googleMap)
         } else {
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                ActivityCompat.requestPermissions(this,
-                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), MY_PERMISSIONS_REQUEST_ACCESS_LOCATION)
+            my_location_fab.setOnClickListener {
+                requestPermission(ACCESS_FINE_LOCATION, MY_PERMISSIONS_REQUEST_ACCESS_LOCATION)
             }
         }
     }
 
+    @SuppressLint("MissingPermission")
+    private fun enableNavigatingToPosition(googleMap: GoogleMap) {
+        googleMap.isMyLocationEnabled = true
+        myLocationButton.visibility = View.GONE
+        my_location_fab.setOnClickListener {
+            navigateToMyPosition()
+        }
+    }
+
+    private fun navigateToMyPosition() {
+        my_location_fab.setImageDrawable(getDrawable(R.drawable.ic_my_location_active))
+        myLocationButton.callOnClick()
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            MY_PERMISSIONS_REQUEST_ACCESS_LOCATION -> {
-                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    @SuppressLint("MissingPermission")
-                    map?.isMyLocationEnabled = true
+        if (requestCode == MY_PERMISSIONS_REQUEST_ACCESS_LOCATION
+                && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            map?.let {
+                enableNavigatingToPosition(it)
+                launch (UI){
+                    delay(100)
+                    navigateToMyPosition()
                 }
             }
         }
@@ -181,4 +207,5 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         startActivity(DetailsActivity.createIntent(this, museumId, museumName))
     }
 }
+
 private const val MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1

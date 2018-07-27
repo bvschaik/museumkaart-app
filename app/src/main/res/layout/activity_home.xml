@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
@@ -9,7 +10,7 @@
 
     <fragment
         android:id="@+id/map_fragment"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:name="nl.biancavanschaik.android.museumkaart.view.MuseumMapFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone"
@@ -17,20 +18,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".MapsActivity" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/my_location_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_my_location_inactive"
-        android:visibility="gone"
-        app:backgroundTint="#ffffff"
-        app:layout_constraintBottom_toTopOf="@+id/navigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:visibility="visible" />
+        tools:layout="@layout/fragment_museum_map"
+        tools:visibility="visible"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/visited_museums_list"

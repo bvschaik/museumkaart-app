@@ -124,6 +124,12 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
         } else {
             googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(camera))
         }
+
+        googleMap.setOnCameraMoveStartedListener { reason ->
+            if (reason != GoogleMap.OnCameraMoveStartedListener.REASON_DEVELOPER_ANIMATION) {
+                my_location_fab.setImageDrawable(getDrawable(R.drawable.ic_my_location_inactive))
+            }
+        }
     }
 
     private fun setupNavigatingToPosition(googleMap: GoogleMap) {
@@ -156,7 +162,7 @@ class HomeActivity : AppCompatActivity(), OnMapReadyCallback {
                 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             map?.let {
                 enableNavigatingToPosition(it)
-                launch (UI){
+                launch(UI) {
                     delay(100)
                     navigateToMyPosition()
                 }

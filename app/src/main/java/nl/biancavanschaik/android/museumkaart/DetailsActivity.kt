@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.activity_details.events_group
 import kotlinx.android.synthetic.main.activity_details.events_list
 import kotlinx.android.synthetic.main.activity_details.exhibitions_group
 import kotlinx.android.synthetic.main.activity_details.exhibitions_list
+import kotlinx.android.synthetic.main.activity_details.museum_name
 import kotlinx.android.synthetic.main.activity_details.opening_hours
 import kotlinx.android.synthetic.main.activity_details.photo
 import kotlinx.android.synthetic.main.activity_details.prices
@@ -50,7 +51,7 @@ class DetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
-        title = intent.getStringExtra(ARG_MUSEUM_NAME)
+        museum_name.text = intent.getStringExtra(ARG_MUSEUM_NAME)
 
         initRecyclerView(exhibitions_list)
         initRecyclerView(events_list)
@@ -99,7 +100,7 @@ class DetailsActivity : AppCompatActivity() {
         progress.isVisible = false
 
         val details = museum.details
-        title = details.name
+        museum_name.text = intent.getStringExtra(ARG_MUSEUM_NAME)
         invalidateOptionsMenu()
 
         visited.text = details.visitedOn?.let { getString(R.string.details_visited_on, it.toHumanString()) }

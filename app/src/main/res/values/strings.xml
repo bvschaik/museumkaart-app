@@ -7,7 +7,7 @@
     <string name="period_description">%1$s t/m %2$s</string>
 
     <!-- Details activity -->
-    <string name="title_activity_details">DetailsActivity</string>
+    <string name="title_activity_details">Museum</string>
     <string name="title_opening_hours">Openingstijden</string>
     <string name="title_address">Adres</string>
     <string name="title_prices">Toegangsprijzen</string>

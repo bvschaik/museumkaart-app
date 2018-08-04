@@ -3,10 +3,15 @@ package nl.biancavanschaik.android.museumkaart.util
 import android.net.Uri
 import android.os.Build
 import android.text.Html
-import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import com.squareup.picasso.Picasso
+import android.text.method.LinkMovementMethod
+import android.text.style.URLSpan
+import android.text.SpannableStringBuilder
+import android.text.style.ClickableSpan
+import android.view.View
+
 
 fun ImageView.loadLargeImage(imagePath: String) = loadImage("700x394", imagePath)
 
@@ -19,11 +24,28 @@ private fun ImageView.loadImage(size: String, path: String) {
 
 fun TextView.setHtmlText(text: String?) {
     val trimmedText = text?.trimHtml()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        this.text = Html.fromHtml(trimmedText ?: "?", Html.FROM_HTML_MODE_COMPACT)
+    val html = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        Html.fromHtml(trimmedText ?: "?", Html.FROM_HTML_MODE_COMPACT)
     } else {
-        this.text = Html.fromHtml(trimmedText ?: "?")
+        Html.fromHtml(trimmedText ?: "?")
     }
+
+    val builder = SpannableStringBuilder(html)
+    builder.getSpans(0, html.length, URLSpan::class.java).forEach { span ->
+        builder.setSpan(
+                object : ClickableSpan() {
+                    override fun onClick(view: View) {
+                        view.context.openWebsite(span.url)
+                    }
+                },
+                builder.getSpanStart(span),
+                builder.getSpanEnd(span),
+                builder.getSpanFlags(span)
+        )
+        builder.removeSpan(span)
+    }
+    this.text = builder
+    this.movementMethod = LinkMovementMethod.getInstance()
 }
 
 fun String.trimHtml(): String {

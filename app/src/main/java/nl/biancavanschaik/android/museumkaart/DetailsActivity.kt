@@ -7,8 +7,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.customtabs.CustomTabsIntent
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -40,6 +38,7 @@ import nl.biancavanschaik.android.museumkaart.data.database.model.MuseumDetails
 import nl.biancavanschaik.android.museumkaart.util.IsoDate
 import nl.biancavanschaik.android.museumkaart.util.Resource
 import nl.biancavanschaik.android.museumkaart.util.loadLargeImage
+import nl.biancavanschaik.android.museumkaart.util.openWebsite
 import nl.biancavanschaik.android.museumkaart.util.setHtmlText
 import nl.biancavanschaik.android.museumkaart.view.ListingRecyclerViewAdapter
 import org.koin.android.architecture.ext.viewModel
@@ -135,14 +134,6 @@ class DetailsActivity : AppCompatActivity() {
     private fun showPromotions(promotions: List<Listing>) {
         promotions_list.adapter = ListingRecyclerViewAdapter(viewModel, promotions)
         promotions_group.isVisible = promotions.isNotEmpty()
-    }
-
-    private fun openWebsite(url: String) {
-        val customTabsIntent = CustomTabsIntent.Builder()
-                .setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary))
-                .build()
-        val fullUrl = if (url.contains("://")) url else "http://$url"
-        customTabsIntent.launchUrl(this, Uri.parse(fullUrl))
     }
 
     private fun openListing(listingId: String) {

@@ -134,7 +134,7 @@ class MuseumMapFragment: Fragment() {
             }
         }
         clusterManager.setOnClusterItemInfoWindowClickListener {
-            openDetails(it.id, it.title)
+            openDetails(it.id)
         }
         googleMap.setOnInfoWindowClickListener(clusterManager)
         googleMap.setOnCameraIdleListener(clusterManager)
@@ -165,8 +165,8 @@ class MuseumMapFragment: Fragment() {
         }
     }
 
-    private fun openDetails(museumId: String, museumName: String) {
-        startActivity(DetailsActivity.createIntent(requireContext(), museumId, museumName))
+    private fun openDetails(museumId: String) {
+        startActivity(DetailsActivity.createIntent(requireContext(), museumId))
     }
 }
 

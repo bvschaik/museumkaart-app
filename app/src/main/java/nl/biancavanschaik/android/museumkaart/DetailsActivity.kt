@@ -51,7 +51,6 @@ class DetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
-        museum_name.text = intent.getStringExtra(ARG_MUSEUM_NAME)
 
         initRecyclerView(exhibitions_list)
         initRecyclerView(events_list)
@@ -100,7 +99,7 @@ class DetailsActivity : AppCompatActivity() {
         progress.isVisible = false
 
         val details = museum.details
-        museum_name.text = intent.getStringExtra(ARG_MUSEUM_NAME)
+        museum_name.text = details.name
         invalidateOptionsMenu()
 
         visited.text = details.visitedOn?.let { getString(R.string.details_visited_on, it.toHumanString()) }
@@ -194,10 +193,9 @@ class DetailsActivity : AppCompatActivity() {
 
     companion object {
         private const val ARG_MUSEUM_ID = "museum_id"
-        private const val ARG_MUSEUM_NAME = "museum_name"
-        fun createIntent(context: Context, museumId: String, museumName: String) = Intent(context, DetailsActivity::class.java).apply {
-            putExtra(ARG_MUSEUM_ID, museumId)
-            putExtra(ARG_MUSEUM_NAME, museumName)
-        }
+        fun createIntent(context: Context, museumId: String) =
+                Intent(context, DetailsActivity::class.java).apply {
+                    putExtra(ARG_MUSEUM_ID, museumId)
+                }
     }
 }

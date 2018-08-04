@@ -32,6 +32,9 @@ class HomeActivity : AppCompatActivity() {
                 wish_list_museums_list.adapter = WishListMuseumRecyclerViewAdapter(viewModel, it)
             }
         })
+        viewModel.selectedMuseumId.observe(this, Observer { id ->
+            id?.let { startActivity(DetailsActivity.createIntent(this, it)) }
+        })
     }
 
     private fun itemSelected(item: MenuItem): Boolean {

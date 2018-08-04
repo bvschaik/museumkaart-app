@@ -134,7 +134,7 @@ class MuseumMapFragment: Fragment() {
             }
         }
         clusterManager.setOnClusterItemInfoWindowClickListener {
-            openDetails(it.id)
+            viewModel.selectedMuseumId.value = it.id
         }
         googleMap.setOnInfoWindowClickListener(clusterManager)
         googleMap.setOnCameraIdleListener(clusterManager)
@@ -163,10 +163,6 @@ class MuseumMapFragment: Fragment() {
                 clusterManager.addItem(MuseumItem(museum.id, position, museum.name, visitedText, icon))
             }
         }
-    }
-
-    private fun openDetails(museumId: String) {
-        startActivity(DetailsActivity.createIntent(requireContext(), museumId))
     }
 }
 

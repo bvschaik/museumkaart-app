@@ -31,10 +31,10 @@ import nl.biancavanschaik.android.museumkaart.map.MuseumItem
 import nl.biancavanschaik.android.museumkaart.util.getBitmapFromVectorDrawable
 import nl.biancavanschaik.android.museumkaart.util.hasPermission
 import nl.biancavanschaik.android.museumkaart.util.requestPermission
-import org.koin.android.architecture.ext.viewModel
+import org.koin.android.architecture.ext.sharedViewModel
 
 class MuseumMapFragment: Fragment() {
-    private val viewModel by viewModel<HomeViewModel>()
+    private val viewModel by sharedViewModel<HomeViewModel>()
 
     private var map: GoogleMap? = null
     private val museumItems = mutableMapOf<String, MuseumItem>()

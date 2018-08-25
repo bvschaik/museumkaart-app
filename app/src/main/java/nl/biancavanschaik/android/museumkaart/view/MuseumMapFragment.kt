@@ -37,7 +37,7 @@ class MuseumMapFragment: Fragment() {
 
     private var map: GoogleMap? = null
     private val museumItems = mutableMapOf<String, MuseumItem>()
-    private lateinit var myLocationButton: View
+    private var myLocationButton: View? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_museum_map, container)
@@ -101,7 +101,7 @@ class MuseumMapFragment: Fragment() {
     @SuppressLint("MissingPermission")
     private fun enableNavigatingToPosition(googleMap: GoogleMap) {
         googleMap.isMyLocationEnabled = true
-        myLocationButton.visibility = View.GONE
+        myLocationButton?.visibility = View.GONE
         my_location_fab.setOnClickListener {
             navigateToMyPosition()
         }
@@ -122,7 +122,7 @@ class MuseumMapFragment: Fragment() {
 
     private fun navigateToMyPosition() {
         my_location_fab.setImageDrawable(requireContext().getDrawable(R.drawable.ic_my_location_active))
-        myLocationButton.callOnClick()
+        myLocationButton?.callOnClick()
     }
 
     private fun setupClusterManager(googleMap: GoogleMap): ClusterManager<MuseumItem> {

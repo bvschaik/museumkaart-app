@@ -46,6 +46,8 @@ import org.koin.android.architecture.ext.viewModel
 class DetailsActivity : AppCompatActivity() {
 
     private val viewModel by viewModel<DetailsViewModel>()
+    private val details: MuseumDetails?
+        get() = viewModel.museumDetails.value?.data?.details
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -146,9 +148,9 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        val details = viewModel.museumDetails.value?.data?.details
-        menu.findItem(R.id.menu_add_to_wish_list)?.isVisible = details?.wishList == false
-        menu.findItem(R.id.menu_remove_from_wish_list)?.isVisible = details?.wishList == true
+        val isOnWishList = details?.wishList
+        menu.findItem(R.id.menu_add_to_wish_list)?.isVisible = isOnWishList == false
+        menu.findItem(R.id.menu_remove_from_wish_list)?.isVisible = isOnWishList == true
         return true
     }
 
@@ -156,7 +158,7 @@ class DetailsActivity : AppCompatActivity() {
         when (item.itemId) {
             android.R.id.home -> onBackPressed()
             R.id.menu_add_to_wish_list -> viewModel.setWishList(true)
-            R.id.menu_navigate -> startNavigation(viewModel.museumDetails.value!!.data!!.details)
+            R.id.menu_navigate -> details?.let { startNavigation(it) }
             R.id.menu_remove_from_wish_list -> viewModel.setWishList(false)
             R.id.menu_mark_visited -> showMarkVisitedDialog()
             else -> return super.onOptionsItemSelected(item)
@@ -170,7 +172,7 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun showMarkVisitedDialog() {
-        val dateVisited = viewModel.museumDetails.value?.data?.details?.visitedOn ?: IsoDate.today()
+        val dateVisited = details?.visitedOn ?: IsoDate.today()
         showDatePicker(dateVisited, { viewModel.setVisitedOn(it) }, { viewModel.setVisitedOn(null) })
     }
 

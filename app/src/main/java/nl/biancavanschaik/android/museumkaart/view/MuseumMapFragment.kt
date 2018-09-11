@@ -22,7 +22,6 @@ import kotlinx.android.synthetic.main.fragment_museum_map.my_location_fab
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
-import nl.biancavanschaik.android.museumkaart.DetailsActivity
 import nl.biancavanschaik.android.museumkaart.HomeViewModel
 import nl.biancavanschaik.android.museumkaart.R
 import nl.biancavanschaik.android.museumkaart.data.CameraPreferences
@@ -149,7 +148,7 @@ class MuseumMapFragment: Fragment() {
 
         // remove deleted museums
         val toRemove = museumItems - museums.map { it.id }
-        toRemove.forEach { key, item -> museumItems.remove(key); clusterManager.removeItem(item) }
+        toRemove.forEach { museumItems.remove(it.key); clusterManager.removeItem(it.value) }
 
         museums.forEach {museum ->
             if (museum.lat != null && museum.lon != null) {

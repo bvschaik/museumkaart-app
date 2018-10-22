@@ -44,4 +44,17 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="BottomNav">
+        <item name="itemTextAppearanceActive">@style/TextAppearance.BottomNavigationView.Active</item>
+        <item name="itemTextAppearanceInactive">@style/TextAppearance.BottomNavigationView.Inactive</item>
+    </style>
+    <style name="TextAppearance"/>
+    <style name="TextAppearance.BottomNavigationView"/>
+    <style name="TextAppearance.BottomNavigationView.Inactive">
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="TextAppearance.BottomNavigationView.Active">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorAccentDark</item>
+    </style>
 </resources>

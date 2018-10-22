@@ -36,7 +36,6 @@ class MuseumMapFragment: Fragment() {
     private val viewModel by sharedViewModel<HomeViewModel>()
 
     private var map: GoogleMap? = null
-    private val museumItems = mutableMapOf<String, MuseumItem>()
     //private var myLocationButton: View? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
@@ -146,11 +145,7 @@ class MuseumMapFragment: Fragment() {
         val unvisitedIcon = BitmapDescriptorFactory.fromBitmap(requireContext().getBitmapFromVectorDrawable(R.drawable.ic_marker_red))
         val visitedIcon = BitmapDescriptorFactory.fromBitmap(requireContext().getBitmapFromVectorDrawable(R.drawable.ic_marker_green))
 
-        // remove deleted museums
-        val toRemove = museumItems - museums.map { it.id }
-        toRemove.forEach { museumItems.remove(it.key); clusterManager.removeItem(it.value) }
-
-        museums.forEach {museum ->
+        museums.mapNotNull { museum ->
             if (museum.lat != null && museum.lon != null) {
                 val position = LatLng(museum.lat, museum.lon)
                 val visitedText = if (museum.visitedOn != null) "${museum.city} (${museum.visitedOn.toHumanString()})" else museum.city
@@ -159,8 +154,14 @@ class MuseumMapFragment: Fragment() {
                     museum.wishList -> wishListIcon
                     else -> unvisitedIcon
                 }
-                clusterManager.addItem(MuseumItem(museum.id, position, museum.name, visitedText, icon))
+                MuseumItem(museum.id, position, museum.name, visitedText, icon)
+            } else {
+                null
             }
+        }.apply {
+            clusterManager.clearItems()
+            clusterManager.addItems(this)
+            clusterManager.cluster()
         }
     }
 }

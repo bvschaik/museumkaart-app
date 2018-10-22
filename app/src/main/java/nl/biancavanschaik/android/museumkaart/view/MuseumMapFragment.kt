@@ -30,7 +30,7 @@ import nl.biancavanschaik.android.museumkaart.map.MuseumItem
 import nl.biancavanschaik.android.museumkaart.util.getBitmapFromVectorDrawable
 import nl.biancavanschaik.android.museumkaart.util.hasPermission
 import nl.biancavanschaik.android.museumkaart.util.requestPermission
-import org.koin.android.architecture.ext.sharedViewModel
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class MuseumMapFragment: Fragment() {
     private val viewModel by sharedViewModel<HomeViewModel>()

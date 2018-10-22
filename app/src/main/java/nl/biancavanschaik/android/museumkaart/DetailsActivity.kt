@@ -41,7 +41,7 @@ import nl.biancavanschaik.android.museumkaart.util.loadLargeImage
 import nl.biancavanschaik.android.museumkaart.util.openWebsite
 import nl.biancavanschaik.android.museumkaart.util.setHtmlText
 import nl.biancavanschaik.android.museumkaart.view.ListingRecyclerViewAdapter
-import org.koin.android.architecture.ext.viewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class DetailsActivity : AppCompatActivity() {
 

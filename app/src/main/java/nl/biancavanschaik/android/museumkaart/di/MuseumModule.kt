@@ -7,17 +7,17 @@ import nl.biancavanschaik.android.museumkaart.data.MuseumDetailsRepository
 import nl.biancavanschaik.android.museumkaart.data.database.MuseumDatabase
 import nl.biancavanschaik.android.museumkaart.data.rest.MuseumRestService
 import nl.biancavanschaik.android.museumkaart.data.rest.MuseumRestServiceFactory
-import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.koin.androidApplication
-import org.koin.dsl.module.applicationContext
+import org.koin.android.viewmodel.ext.koin.viewModel
+import org.koin.dsl.module.module
 
-val museumModule = applicationContext {
-    bean { MuseumDatabase.getInstance(androidApplication()) }
-    bean { get<MuseumDatabase>().museumDao() }
+val museumModule = module {
+    single { MuseumDatabase.getInstance(androidApplication()) }
+    single { get<MuseumDatabase>().museumDao() }
 
-    bean { MuseumRestServiceFactory.getInstance() }
-    bean { get<MuseumRestServiceFactory>().create(MuseumRestService::class.java) }
-    bean { MuseumDetailsRepository(get(), get()) }
+    single { MuseumRestServiceFactory.getInstance() }
+    single { get<MuseumRestServiceFactory>().create(MuseumRestService::class.java) }
+    single { MuseumDetailsRepository(get(), get()) }
 
     viewModel { HomeViewModel(get()) }
     viewModel { DetailsViewModel(get()) }

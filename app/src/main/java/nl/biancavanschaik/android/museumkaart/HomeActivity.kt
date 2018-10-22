@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.activity_home.visited_museums_list
 import kotlinx.android.synthetic.main.activity_home.wish_list_museums_list
 import nl.biancavanschaik.android.museumkaart.view.VisitedMuseumRecyclerViewAdapter
 import nl.biancavanschaik.android.museumkaart.view.WishListMuseumRecyclerViewAdapter
-import org.koin.android.architecture.ext.viewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class HomeActivity : AppCompatActivity() {
 
@@ -58,7 +58,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun showTab(tab: Tab) {
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map_fragment)
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map_fragment) ?: return
         when (tab) {
             Tab.MAP -> {
                 supportFragmentManager.beginTransaction().show(mapFragment).commit()

@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.activity_listing.progress
 import nl.biancavanschaik.android.museumkaart.data.database.model.Listing
 import nl.biancavanschaik.android.museumkaart.util.loadLargeImage
 import nl.biancavanschaik.android.museumkaart.util.setHtmlText
-import org.koin.android.architecture.ext.viewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class ListingActivity : AppCompatActivity() {
 

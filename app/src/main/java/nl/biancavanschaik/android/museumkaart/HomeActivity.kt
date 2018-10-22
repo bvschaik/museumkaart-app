@@ -3,6 +3,9 @@ package nl.biancavanschaik.android.museumkaart
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
 import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.activity_home.navigation
@@ -20,21 +23,28 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        initRecyclerView(visited_museums_list)
+        initRecyclerView(wish_list_museums_list)
+
         navigation.setOnNavigationItemSelectedListener(::itemSelected)
 
-        viewModel.visitedMuseums.observe(this, Observer {
-            it?.let {
+        viewModel.visitedMuseums.observe(this, Observer { museums ->
+            museums?.let {
                 visited_museums_list.adapter = VisitedMuseumRecyclerViewAdapter(viewModel, it)
             }
         })
-        viewModel.wishListMuseums.observe(this, Observer {
-            it?.let {
+        viewModel.wishListMuseums.observe(this, Observer { museums ->
+            museums?.let {
                 wish_list_museums_list.adapter = WishListMuseumRecyclerViewAdapter(viewModel, it)
             }
         })
         viewModel.selectedMuseumId.observe(this, Observer { id ->
             id?.let { startActivity(DetailsActivity.createIntent(this, it)) }
         })
+    }
+
+    private fun initRecyclerView(recyclerView: RecyclerView) {
+        recyclerView.addItemDecoration(DividerItemDecoration(recyclerView.context, LinearLayoutManager.VERTICAL))
     }
 
     private fun itemSelected(item: MenuItem): Boolean {

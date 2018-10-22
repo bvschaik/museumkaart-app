@@ -1,7 +1,7 @@
 package nl.biancavanschaik.android.museumkaart.data.database.model
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import nl.biancavanschaik.android.museumkaart.util.IsoDate
 
 @Entity(tableName = "museums")

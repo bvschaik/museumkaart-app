@@ -1,6 +1,6 @@
 package nl.biancavanschaik.android.museumkaart.data.database.converter
 
-import android.arch.persistence.room.TypeConverter
+import androidx.room.TypeConverter
 import nl.biancavanschaik.android.museumkaart.util.IsoDate
 
 class IsoDateConverter {

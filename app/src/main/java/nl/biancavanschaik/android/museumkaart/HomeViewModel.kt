@@ -1,6 +1,6 @@
 package nl.biancavanschaik.android.museumkaart
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import nl.biancavanschaik.android.museumkaart.data.MuseumDetailsRepository
 import nl.biancavanschaik.android.museumkaart.util.livedata.EventLiveData
 

@@ -1,6 +1,6 @@
 package nl.biancavanschaik.android.museumkaart.util.livedata
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 
 class InputLiveData<T> : MutableLiveData<T>() {
 

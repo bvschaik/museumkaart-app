@@ -1,6 +1,6 @@
 package nl.biancavanschaik.android.museumkaart.util.rest
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import retrofit2.CallAdapter
 import retrofit2.CallAdapter.Factory
 import retrofit2.Retrofit

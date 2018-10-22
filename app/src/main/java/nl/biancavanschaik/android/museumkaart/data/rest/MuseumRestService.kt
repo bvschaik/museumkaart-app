@@ -1,6 +1,6 @@
 package nl.biancavanschaik.android.museumkaart.data.rest
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import nl.biancavanschaik.android.museumkaart.data.rest.model.RestMuseum
 import nl.biancavanschaik.android.museumkaart.util.rest.ApiResponse
 import retrofit2.http.GET

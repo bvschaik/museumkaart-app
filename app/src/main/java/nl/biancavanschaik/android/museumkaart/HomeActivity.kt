@@ -1,11 +1,11 @@
 package nl.biancavanschaik.android.museumkaart
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.MenuItem
 import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.activity_home.navigation
@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.activity_home.visited_museums_list
 import kotlinx.android.synthetic.main.activity_home.wish_list_museums_list
 import nl.biancavanschaik.android.museumkaart.view.VisitedMuseumRecyclerViewAdapter
 import nl.biancavanschaik.android.museumkaart.view.WishListMuseumRecyclerViewAdapter
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeActivity : AppCompatActivity() {
 

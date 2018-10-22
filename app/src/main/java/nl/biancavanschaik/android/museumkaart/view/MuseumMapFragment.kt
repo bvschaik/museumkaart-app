@@ -2,10 +2,10 @@ package nl.biancavanschaik.android.museumkaart.view
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -30,14 +30,14 @@ import nl.biancavanschaik.android.museumkaart.map.MuseumItem
 import nl.biancavanschaik.android.museumkaart.util.getBitmapFromVectorDrawable
 import nl.biancavanschaik.android.museumkaart.util.hasPermission
 import nl.biancavanschaik.android.museumkaart.util.requestPermission
-import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class MuseumMapFragment: Fragment() {
     private val viewModel by sharedViewModel<HomeViewModel>()
 
     private var map: GoogleMap? = null
     private val museumItems = mutableMapOf<String, MuseumItem>()
-    private var myLocationButton: View? = null
+    //private var myLocationButton: View? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_museum_map, container)
@@ -46,7 +46,7 @@ class MuseumMapFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.goole_map_fragment) as SupportMapFragment
-        myLocationButton = mapFragment.view!!.findViewById("2".toInt())
+        //myLocationButton = mapFragment.view!!.findViewById("2".toInt())
         mapFragment.getMapAsync(::onMapReady)
     }
 
@@ -88,20 +88,20 @@ class MuseumMapFragment: Fragment() {
     }
 
     private fun setupNavigatingToMyPosition(googleMap: GoogleMap) {
-        my_location_fab.visibility = View.VISIBLE
+        //my_location_fab.visibility = View.VISIBLE
         if (requireContext().hasPermission(ACCESS_FINE_LOCATION)) {
             enableNavigatingToPosition(googleMap)
         } else {
-            my_location_fab.setOnClickListener {
-                requireActivity().requestPermission(ACCESS_FINE_LOCATION, MY_PERMISSIONS_REQUEST_ACCESS_LOCATION)
-            }
+//            my_location_fab.setOnClickListener {
+//                requireActivity().requestPermission(ACCESS_FINE_LOCATION, MY_PERMISSIONS_REQUEST_ACCESS_LOCATION)
+//            }
         }
     }
 
     @SuppressLint("MissingPermission")
     private fun enableNavigatingToPosition(googleMap: GoogleMap) {
         googleMap.isMyLocationEnabled = true
-        myLocationButton?.visibility = View.GONE
+        //myLocationButton?.visibility = View.GONE
         my_location_fab.setOnClickListener {
             navigateToMyPosition()
         }
@@ -122,7 +122,7 @@ class MuseumMapFragment: Fragment() {
 
     private fun navigateToMyPosition() {
         my_location_fab.setImageDrawable(requireContext().getDrawable(R.drawable.ic_my_location_active))
-        myLocationButton?.callOnClick()
+        //myLocationButton?.callOnClick()
     }
 
     private fun setupClusterManager(googleMap: GoogleMap): ClusterManager<MuseumItem> {

@@ -1,7 +1,7 @@
 package nl.biancavanschaik.android.museumkaart.data
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MediatorLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
 import nl.biancavanschaik.android.museumkaart.data.database.MuseumDao

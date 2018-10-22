@@ -1,7 +1,7 @@
 package nl.biancavanschaik.android.museumkaart.data.database.model
 
-import android.arch.persistence.room.Embedded
-import android.arch.persistence.room.Relation
+import androidx.room.Embedded
+import androidx.room.Relation
 
 data class Museum @JvmOverloads constructor(
     @Embedded

@@ -1,8 +1,8 @@
 package nl.biancavanschaik.android.museumkaart
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Transformations
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
 import nl.biancavanschaik.android.museumkaart.data.MuseumDetailsRepository
 import nl.biancavanschaik.android.museumkaart.data.database.model.Museum
 import nl.biancavanschaik.android.museumkaart.util.IsoDate

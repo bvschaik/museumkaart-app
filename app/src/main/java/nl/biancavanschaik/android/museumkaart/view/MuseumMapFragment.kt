@@ -63,8 +63,8 @@ class MuseumMapFragment: Fragment() {
         setupNavigatingToMyPosition(googleMap)
 
         val clusterManager = setupClusterManager(googleMap)
-        viewModel.allMuseums.observe(this, Observer {
-            it?.data?.let { showMuseums(it, clusterManager) }
+        viewModel.allMuseums.observe(viewLifecycleOwner, Observer {
+            it?.data?.let { museums -> showMuseums(museums, clusterManager) }
         })
 
         setupCameraPosition(googleMap)
